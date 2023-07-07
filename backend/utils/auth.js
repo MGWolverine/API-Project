@@ -70,4 +70,16 @@ const requireAuth = function (req, _res, next) {
     return next(err);
 }
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+// All endpoints that require proper authorization
+
+const requirePropAuth = function (req, _res, next) {
+  if (req.user) return next();
+
+  const err = new Error('Proper Authentication required');
+  err.title = 'Proper Authentication required';
+  err.errors = { message: 'Proper Authentication required' };
+  err.status = 403;
+  return next(err);
+}
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, requirePropAuth };
