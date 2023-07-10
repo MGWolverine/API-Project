@@ -50,9 +50,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Events');
+    options.tableName = 'Events';
+    await queryInterface.dropTable(options);
   }
 };
