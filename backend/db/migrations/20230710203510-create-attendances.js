@@ -10,13 +10,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       eventId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Events",
+        }
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+        }
       },
       status: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('active', 'inactive', 'pending')
       },
       createdAt: {
         allowNull: false,

@@ -10,10 +10,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       venueId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Venues",
+        }
       },
       groupId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Groups",
+        }
       },
       name: {
         type: Sequelize.STRING
@@ -22,7 +28,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       type: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('active', 'inactive', 'pending')
       },
       capacity: {
         type: Sequelize.INTEGER

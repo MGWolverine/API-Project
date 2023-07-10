@@ -10,13 +10,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+        }
       },
       groupId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Groups",
+        }
       },
       status: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('active', 'inactive', 'pending')
       },
       createdAt: {
         allowNull: false,

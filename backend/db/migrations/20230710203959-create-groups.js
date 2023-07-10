@@ -10,7 +10,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       organizerId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Organizers",
+        }
       },
       name: {
         type: Sequelize.STRING
@@ -19,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       type: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('active', 'inactive', 'pending')
       },
       private: {
         type: Sequelize.BOOLEAN
