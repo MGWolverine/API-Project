@@ -3,23 +3,29 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
+    await Event.bulkCreate([
+      {
+        url: "www.url1.com",
+        preview: true
+      },
+      {
+        url: "www.url2.com",
+        preview: true
+      },
+      {
+        url: "www.url3.com",
+        preview: true
+      }
+    ])
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    options.tableName = 'Events';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      name: { [Op.in]: [
+        'Boxing in the Park', 'Run on the Beach', 'Hiking in the Mountains'
+      ] }
+    }, {});
   }
 };

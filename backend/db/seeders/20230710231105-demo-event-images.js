@@ -5,23 +5,26 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await Event.bulkCreate([
       {
-        status: active
+        url: "www.url1.com",
+        preview: true
       },
       {
-        status: active
+        url: "www.url2.com",
+        preview: true
       },
       {
-        status: active
+        url: "www.url3.com",
+        preview: true
       }
     ])
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Events';
+    options.tableName = 'EventImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: [
-        'Boxing in the Park', 'Run on the Beach', 'Hiking in the Mountains'
+      url: { [Op.in]: [
+        'www.url1.com', 'www.url1.com', 'www.url3.com'
       ] }
     }, {});
   }
