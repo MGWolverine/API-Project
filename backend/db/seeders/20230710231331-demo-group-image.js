@@ -1,18 +1,23 @@
 'use strict';
 
+const { GroupImage } = require('../models');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await Event.bulkCreate([
+    await GroupImage.bulkCreate([
       {
+        groupId: 1,
         url: "www.url1.com",
         preview: true
       },
       {
+        groupId: 2,
         url: "www.url2.com",
         preview: true
       },
       {
+        groupId: 3,
         url: "www.url3.com",
         preview: true
       }
@@ -20,7 +25,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Events';
+    options.tableName = 'GroupImage';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       name: { [Op.in]: [

@@ -1,23 +1,31 @@
 'use strict';
 
+const { Attendance } = require('../models');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await Event.bulkCreate([
+    await Attendance.bulkCreate([
       {
-        status: active
+        eventId: 1,
+        userId: 1,
+        status: "active"
       },
       {
-        status: active
+        eventId: 2,
+        userId: 2,
+        status: "active"
       },
       {
-        status: active
+        eventId: 3,
+        userId: 3,
+        status: "active"
       }
     ])
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Events';
+    options.tableName = 'Attendence';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       name: { [Op.in]: [

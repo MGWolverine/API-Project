@@ -1,10 +1,13 @@
 'use strict';
 
+const { Group } = require('../models');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await Event.bulkCreate([
+    await Group.bulkCreate([
       {
+        organizerId: 1,
         name: "GroupName1",
         about: "about1",
         type: "active",
@@ -13,6 +16,7 @@ module.exports = {
         state: "State1"
       },
       {
+        organizerId: 2,
         name: "GroupName2",
         about: "about2",
         type: "active",
@@ -21,6 +25,7 @@ module.exports = {
         state: "State2"
       },
       {
+        organizerId: 3,
         name: "GroupName3",
         about: "about3",
         type: "active",
@@ -32,7 +37,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Events';
+    options.tableName = 'Group';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       name: { [Op.in]: [

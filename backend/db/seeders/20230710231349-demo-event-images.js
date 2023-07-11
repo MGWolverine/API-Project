@@ -1,18 +1,23 @@
 'use strict';
 
+const { EventImage } = require('../models');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await Event.bulkCreate([
+    await EventImage.bulkCreate([
       {
+        eventId: 1,
         url: "www.url1.com",
         preview: true
       },
       {
+        eventId: 2,
         url: "www.url2.com",
         preview: true
       },
       {
+        eventId: 3,
         url: "www.url3.com",
         preview: true
       }

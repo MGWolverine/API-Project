@@ -17,13 +17,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: "Events",
-        }
+        },
+        onDelete: 'cascade'
       },
       userId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
-        }
+        },
+        onDelete: 'cascade'
       },
       status: {
         type: Sequelize.ENUM('active', 'inactive', 'pending')

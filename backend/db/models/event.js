@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Event.hasMany(
+        models.Attendance,
+        {foreignKey: 'eventId', onDelete: 'CASCADE'}
+      );
+      Event.hasMany(
+        models.EventImage,
+        {foreignKey: 'eventId', onDelete: 'CASCADE'}
+      );
+
     }
   }
   Event.init({
@@ -18,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     description: DataTypes.STRING,
-    type: DataTypes.ENUM,
+    type: DataTypes.ENUM('active', 'inactive', 'pending'),
     capacity: DataTypes.INTEGER,
     price: DataTypes.INTEGER
   }, {
