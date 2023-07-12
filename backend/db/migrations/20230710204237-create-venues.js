@@ -21,19 +21,47 @@ module.exports = {
         onDelete: 'cascade'
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+          allowNull: false,
+          validate: {
+            notEmpty: {
+              msg: "Street address is required"
+            }
+          }
       },
       city: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+          allowNull: false,
+          validate: {
+            notEmpty: {
+              msg: "City is required"
+            }
+          }
       },
       state: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+          allowNull: false,
+          validate: {
+            notEmpty: {
+              msg: "State is required"
+            }
+          }
       },
       lat: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL,
+          validate: {
+            isDecimal: {
+              msg: "Latitude is not valid"
+            }
+          }
       },
       lng: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL,
+          validate: {
+            isDecimal: {
+              msg: "Longitude is not valid"
+            }
+          }
       },
       createdAt: {
         allowNull: false,

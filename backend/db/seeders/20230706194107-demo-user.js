@@ -34,7 +34,7 @@ module.exports = {
       }
     ], { validate: true }).catch(err => {
       for (let error of err.errors) {
-        throw error.messege
+        throw error.message
       }
 
       }

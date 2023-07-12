@@ -10,7 +10,7 @@ module.exports = {
         organizerId: 1,
         name: "GroupName1",
         about: "about1",
-        type: "active",
+        type: "In person",
         private: true,
         city: "City1",
         state: "State1"
@@ -19,7 +19,7 @@ module.exports = {
         organizerId: 2,
         name: "GroupName2",
         about: "about2",
-        type: "active",
+        type: "In person",
         private: true,
         city: "City2",
         state: "State2"
@@ -28,7 +28,7 @@ module.exports = {
         organizerId: 3,
         name: "GroupName3",
         about: "about3",
-        type: "active",
+        type: "In person",
         private: true,
         city: "City3",
         state: "State3"

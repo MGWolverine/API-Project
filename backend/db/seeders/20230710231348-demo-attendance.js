@@ -9,17 +9,17 @@ module.exports = {
       {
         eventId: 1,
         userId: 1,
-        status: "active"
+        status: "In person"
       },
       {
         eventId: 2,
         userId: 2,
-        status: "active"
+        status: "In person"
       },
       {
         eventId: 3,
         userId: 3,
-        status: "active"
+        status: "In person"
       }
     ])
   },

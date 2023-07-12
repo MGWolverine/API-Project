@@ -21,22 +21,61 @@ module.exports = {
         onDelete: 'cascade'
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: [1,60],
+          notEmpty: {
+            msg: "Name must be 60 characters or less"
+          }
+        }
       },
       about: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: [50, Infinity],
+          notEmpty: {
+            msg: "About must be 50 characters or more"
+          }
+        }
       },
       type: {
-        type: Sequelize.ENUM('active', 'inactive', 'pending')
+        type: Sequelize.ENUM('Online', 'In person'),
+        allowNull: false,
+        validate: {
+          isIn: {
+            args: [['Online', 'In person']],
+            msg: "Type must be 'Online' or 'In person'"
+          }
+        }
       },
       private: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        validate: {
+          isBoolean: {
+            msg: "Private must be a boolean"
+          }
+        }
       },
       city: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "City is required"
+          }
+        }
       },
       state: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "State is required"
+          }
+        }
       },
       createdAt: {
         allowNull: false,

@@ -23,13 +23,98 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Event.init({
-    venueId: DataTypes.INTEGER,
-    groupId: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    type: DataTypes.ENUM('active', 'inactive', 'pending'),
-    capacity: DataTypes.INTEGER,
-    price: DataTypes.INTEGER
+    venueId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Venue does not exist",
+        },
+      },
+    },
+    groupId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Group does not exist",
+        },
+      },
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [5],
+          msg: "Name must be at least 5 characters",
+        },
+      },
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Description is required",
+        },
+      },
+    },
+    type: {
+      type: DataTypes.ENUM('Online', 'In person'),
+      allowNull: false,
+      validate: {
+        isIn: {
+          args: [['Online', 'In person']],
+          msg: "Type must be 'Online' or 'In person'",
+        },
+      },
+    },
+    capacity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isInt: {
+          msg: "Capacity must be an integer",
+        },
+      },
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isInt: {
+          msg: "Price is invalid",
+        },
+      },
+    },
+    startDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        isDate: {
+          msg: "Start date must be a valid date",
+        },
+        isFuture: {
+          msg: "Start date must be in the future",
+        },
+      },
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        isDate: {
+          msg: "End date must be a valid date",
+        },
+        isAfterStart: function (value) {
+          const startDate = new Date(this.startDate);
+          if (value && startDate && value <= startDate) {
+            throw new Error("End date must be after the start date");
+          }
+        },
+      },
+    },
   }, {
     sequelize,
     modelName: 'Event',

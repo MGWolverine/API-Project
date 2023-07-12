@@ -18,35 +18,102 @@ module.exports = {
         references: {
           model: "Venues",
         },
-        onDelete: 'cascade'
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+          allowNull: false,
+          validate: {
+            notNull: {
+              msg: "Venue does not exist",
+            },
+          },
       },
       groupId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Groups",
         },
-        onDelete: 'cascade'
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+          allowNull: false,
+          validate: {
+            notNull: {
+              msg: "Group does not exist",
+            },
+          },
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [5],
+            msg: "Name must be at least 5 characters",
+          },
+        },
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Description is required",
+          },
+        },
       },
       type: {
-        type: Sequelize.ENUM('active', 'inactive', 'pending')
+        type: Sequelize.ENUM('Online', 'In person'),
+        allowNull: false,
+        validate: {
+          isIn: {
+            args: [['Online', 'In person']],
+            msg: "Type must be 'Online' or 'In person'",
+          },
+        },
       },
       capacity: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+          isInt: {
+            msg: "Capacity must be an integer",
+          },
+        },
       },
       price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+          isInt: {
+            msg: "Price is invalid",
+          },
+        },
       },
       startDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false,
+        validate: {
+          isDate: {
+            msg: "Start date must be a valid date",
+          },
+          isFuture: {
+            msg: "Start date must be in the future",
+          },
+        },
       },
       endDate: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false,
+        validate: {
+          isDate: {
+            msg: "End date must be a valid date",
+          },
+          isAfterStart: function (value) {
+            const startDate = new Date(this.startDate);
+            if (value && startDate && value <= startDate) {
+              throw new Error("End date must be after the start date");
+            }
+          },
+        },
       },
       createdAt: {
         allowNull: false,
