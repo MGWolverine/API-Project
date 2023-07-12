@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
         models.User,
         {foreignKey: 'organizerId', as: 'numMembers', onDelete: 'CASCADE'}
       )
+      Group.belongsTo(
+        models.User,
+        {foreignKey: 'organizerId', as: 'Organizer', onDelete: 'CASCADE'}
+      )
     }
   }
   Group.init({
