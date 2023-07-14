@@ -87,10 +87,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        isInt: {
+        isDecimal: {
           msg: "Price is invalid",
         },
       },
@@ -101,9 +101,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isDate: {
           msg: "Start date must be a valid date",
-        },
-        isFuture: {
-          msg: "Start date must be in the future",
         },
       },
     },

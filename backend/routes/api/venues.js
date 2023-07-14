@@ -34,7 +34,7 @@ const validateVenues = [
 
 const router = express.Router();
 
-
+// Edit a Venue specified by its id
 
 router.put('/:venueId',validateVenues, requireAuth, async (req, res) => {
     const {venueId} = req.params;

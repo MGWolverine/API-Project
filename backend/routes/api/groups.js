@@ -62,6 +62,8 @@ const validateGroups = [
 
 const router = express.Router();
 
+//Get all Groups
+
 router.get('/', requireAuth, async (req, res) => {
         const groups = await Group.findAll({
           include: [
@@ -104,6 +106,7 @@ router.get('/', requireAuth, async (req, res) => {
     }
 );
 
+//Get all Groups joined or organized by the Current User
 
 router.get('/current', requireAuth, async (req, res) => {
         const userId = req.user.id;
@@ -152,9 +155,10 @@ router.get('/current', requireAuth, async (req, res) => {
     }
 );
 
+//Get details of a Group from an id
 
 router.get('/:groupId', async (req,res) => {
-  const {groupId} = req.params;
+  const groupId = req.params.groupId;
 
   const group = await Group.findByPk(groupId, {
     include: [
@@ -187,60 +191,12 @@ router.get('/:groupId', async (req,res) => {
 
   res.status(200).json(groupData);
 })
-// router.get('/', async (req, res) => {
-//         const groups = await Group.findAll({
-//             attributes: [
-                // 'id',
-                // 'organizerId',
-                // 'name',
-                // 'about',
-                // 'type',
-                // 'private',
-                // 'city',
-                // 'state',
-                // 'createdAt',
-                // 'updatedAt',
-                // [sequelize.literal(
-                //     '(SELECT COUNT(*) FROM Groups WHERE Groups.id = `Group`.id)'
-                //     ),
-                //  'numMembers'
-                // ],
-//                 'previewImage'
-//             ],
-//         });
-//         res.status(200).json(groups);
-//     }
-// );
+
+//Creates and returns a new group.
 
 router.post('/', validateGroups, requireAuth, async (req, res) => {
     const { name, about, type, private, city, state } = req.body;
     const UserID = req.user.id;
-
-    // const errors = {};
-    // if (!name || name.length > 60) {
-    //   errors.name = 'Name must be 60 characters or less';
-    // }
-    // if (!about || about.length < 50) {
-    //   errors.about = 'About must be 50 characters or more';
-    // }
-    // if (type !== 'Online' && type !== 'In person') {
-    //   errors.type = "Type must be 'Online' or 'In person'";
-    // }
-    // if (typeof private !== 'boolean') {
-    //   errors.private = 'Private must be a boolean';
-    // }
-    // if (!city) {
-    //   errors.city = 'City is required';
-    // }
-    // if (!state) {
-    //   errors.state = 'State is required';
-    // }
-    // if (Object.keys(errors).length > 0) {
-    //     return res.status(400).json({
-    //       message: 'Bad Request',
-    //       errors,
-    //     });
-    //   }
 
     try {
       const createdGroup = await Group.create({
@@ -259,8 +215,10 @@ router.post('/', validateGroups, requireAuth, async (req, res) => {
     }
   });
 
+//Create and return a new image for a group specified by id.
+
 router.post('/:groupId/images', requireAuth, async (req, res) => {
-  const { groupId } = req.params;
+  const groupId = req.params.groupId;
   const { url, preview } = req.body;
 
   const group = await Group.findByPk(groupId);
@@ -281,8 +239,10 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
   });
 });
 
+// Updates and returns an existing group.
+
 router.put('/:groupId',validateGroups, requireAuth, async (req, res) => {
-  const { groupId } = req.params;
+  const groupId = req.params.groupId;
   const { name, about, type, private, city, state } = req.body;
 
   const group = await Group.findByPk(groupId);
@@ -316,8 +276,10 @@ router.put('/:groupId',validateGroups, requireAuth, async (req, res) => {
     });
 })
 
+//Deletes an existing group.
+
 router.delete('/:groupId', requireAuth, async (req, res) => {
-  const {groupId} = req.params;
+  const groupId = req.params.groupId;
 
   const group = await Group.findByPk(groupId);
   if (!group) {
@@ -333,8 +295,10 @@ router.delete('/:groupId', requireAuth, async (req, res) => {
   res.status(200).json({ message: 'Successfully deleted' });
 })
 
+// Create a new Venue for a Group specified by its id
+
 router.post('/:groupId/venues',validateVenues, requireAuth, async (req, res) => {
-  const {groupId} = req.params;
+  const groupId = req.params.groupId;
   const { address, city, state, lat, lng } = req.body;
 
   const group = await Venue.findByPk(groupId);
@@ -377,8 +341,10 @@ router.post('/:groupId/venues',validateVenues, requireAuth, async (req, res) => 
   });
 })
 
+// Get All Venues for a Group specified by its id
+
 router.get('/:groupId/venues', requireAuth, async (req, res) => {
-  const { groupId } = req.params;
+  const groupId = req.params.groupId;
 
   const group = await Group.findByPk(groupId);
 
@@ -412,8 +378,10 @@ router.get('/:groupId/venues', requireAuth, async (req, res) => {
 
 });
 
+// Get all Events of a Group specified by its id
+
 router.get('/:groupId/events', async (req, res) => {
-  const { groupId } = req.params;
+  const groupId = req.params.groupId;
 
   const group = await Group.findByPk(groupId);
 
@@ -451,8 +419,10 @@ router.get('/:groupId/events', async (req, res) => {
 })
 
 
+// Create an Event for a Group specified by its id
+
 router.post('/:groupId/events', requireAuth, async (req, res) => {
-  const { groupId } = req.params;
+  const groupId = req.params.groupId;
   const {
     venueId,
     name,
@@ -469,14 +439,6 @@ router.post('/:groupId/events', requireAuth, async (req, res) => {
     return res.status(404).json({ message: "Group couldn't be found" });
   }
 
-
-  const currentUser = req.user;
-  const isOrganizer = group.organizerId === currentUser.id;
-  const isCoHost = await group.hasMember(currentUser.id, { through: { status: 'co-host' } });
-  if (!isOrganizer && !isCoHost) {
-    return res.status(403).json({ message: "Unauthorized: You must be the organizer or a co-host of the group" });
-  }
-
     const event = await Event.create({
       groupId,
       venueId,
@@ -491,5 +453,89 @@ router.post('/:groupId/events', requireAuth, async (req, res) => {
 
     res.status(200).json(event);
 });
+
+// Get all Members of a Group specified by its id
+
+router.get('/:groupId/members', async (req, res) => {
+  const groupId = req.params.groupId;
+
+  const group = await Group.findByPk(groupId);
+
+  if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" });
+  }
+
+  const members = await Membership.findAll({
+    where: {
+      groupId
+    },
+    attributes: [
+      'status'
+    ]
+  })
+
+  res.status(200).json(members)
+})
+
+//Request a Membership for a Group based on the Group's id
+
+router.post('/:groupId/membership', requireAuth, async(req, res) => {
+  const groupId = req.params.groupId;
+  console.log(req.params)
+
+  const group = await Group.findByPk(groupId);
+  if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" });
+  }
+
+  // if (status === 'member') {
+  //   return res.status(404).json({ message: "User is already a member of the group" });
+  // }
+
+  const membership = await Membership.create({
+    groupId,
+    status: 'pending'
+  });
+
+  res.status(200).json(membership)
+})
+
+// Change the status of a membership for a group specified by id
+
+router.put('/:groupId/membership', requireAuth, async (req, res) => {
+  const groupId = req.params.groupId;
+
+  const group = await Group.findByPk(groupId);
+  if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" });
+  }
+
+  const membership = await Membership.findOne({
+    where: {
+      groupId: groupId,
+    }
+  });
+
+  if (!membership) {
+    return res.status(404).json({ message: "Membership couldn't be found" });
+  }
+
+  res.status(200).json(membership);
+})
+
+// Delete membership to a group specified by id
+
+router.delete('/:groupId/membership', requireAuth, async(req, res) => {
+  const groupId = req.params.groupId;
+  
+  const group = await Group.findByPk(groupId);
+  if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" });
+  }
+
+  await group.destroy();
+
+  res.status(200).json({ message: 'Successfully deleted' });
+})
 
 module.exports = router;

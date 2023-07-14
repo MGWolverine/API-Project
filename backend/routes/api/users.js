@@ -51,7 +51,7 @@ const router = express.Router();
     }
   );
 
-// Sign up
+// Sign Up a User
 router.post(
   '',
   validateSignup,

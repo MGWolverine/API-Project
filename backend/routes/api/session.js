@@ -19,7 +19,7 @@ const validateLogin = [
     .withMessage('Please provide a password.'),
   handleValidationErrors
 ];
-// Log in
+//Log In a User
 router.post(
   '/',
   validateLogin,
