@@ -2,11 +2,12 @@ const express = require('express');
 
 const { Op } = require('sequelize');
 
-const { Group, sequelize, GroupImage, User, Venue } = require('../../db/models');
+const { Group, sequelize, GroupImage, User, Venue, Membership, Event } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const venue = require('../../db/models/venue');
 
 const validateGroups = [
     check('name')
@@ -33,6 +34,30 @@ const validateGroups = [
        .isLength({ min: 1 })
        .withMessage('State is required'),
     handleValidationErrors
+  ];
+
+  const validateVenues = [
+    check('address')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('Street address is required'),
+    check('city')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('City is required'),
+    check('state')
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage('State is required'),
+    check('lat')
+    .optional()
+    .isDecimal()
+    .withMessage('Latitude is not valid'),
+  check('lng')
+    .optional()
+    .isDecimal()
+    .withMessage('Longitude is not valid'),
+    handleValidationErrors,
   ];
 
 const router = express.Router();
@@ -135,16 +160,22 @@ router.get('/:groupId', async (req,res) => {
     include: [
       {
         model: GroupImage,
-        attributes: ['id', 'url', 'preview'],
+        attributes: [
+          'id', 'url', 'preview'
+        ],
       },
       {
         model: User,
         as: 'Organizer',
-        attributes: ['id', 'firstName', 'lastName'],
+        attributes: [
+          'id', 'firstName', 'lastName'
+        ],
       },
       {
         model: Venue,
-        attributes: ['id', 'groupId', 'address', 'city', 'state', 'lat', 'lng'],
+        attributes: [
+          'id', 'groupId', 'address', 'city', 'state', 'lat', 'lng'
+        ],
       }
     ]
   })
@@ -302,14 +333,163 @@ router.delete('/:groupId', requireAuth, async (req, res) => {
   res.status(200).json({ message: 'Successfully deleted' });
 })
 
-router.get('/:groupId/venues', requireAuth, async (req, res) => {
+router.post('/:groupId/venues',validateVenues, requireAuth, async (req, res) => {
+  const {groupId} = req.params;
+  const { address, city, state, lat, lng } = req.body;
+
   const group = await Venue.findByPk(groupId);
+  console.log(group)
+  if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" });
+  }
+
+  const userId = req.user.id;
+  const membership = await Membership.findOne({
+    where: {
+      groupId,
+      userId,
+      status: 'co-host'
+    }
+  });
+
+  if (!membership && group.ownerId !== userId) {
+    return res.status(403).json({ message: "You are not authorized to create a venue for this group." });
+  }
+
+  const venue = await Venue.create({
+    groupId,
+    address,
+    city,
+    state,
+    lat,
+    lng
+  });
+
+
+  res.status(200).json({
+    id: venue.id,
+    groupId: venue.groupId,
+    address: venue.address,
+    city: venue.city,
+    state: venue.state,
+    lat: venue.lat,
+    lng: venue.lng
+  });
+})
+
+router.get('/:groupId/venues', requireAuth, async (req, res) => {
+  const { groupId } = req.params;
+
+  const group = await Group.findByPk(groupId);
+
+  if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" });
+  }
+
+  const userId = req.user.id;
+  const membership = await Membership.findOne({
+    where: {
+      groupId,
+      userId,
+      status: 'co-host'
+    }
+  });
+
+  if (!membership && group.ownerId !== userId) {
+    return res.status(403).json({ message: "You are not authorized to view venues for this group." });
+  }
+
+  const venues = await Venue.findAll({
+    where: {
+      groupId
+    },
+    attributes: [
+      'id', 'groupId', 'address', 'city', 'state', 'lat', 'lng'
+    ]
+  });
+
+  res.status(200).json({ Venues: venues });
+
+});
+
+router.get('/:groupId/events', async (req, res) => {
+  const { groupId } = req.params;
+
+  const group = await Group.findByPk(groupId);
+
+  if (!group) {
+    return res.status(404).json({ message: "Group couldn't be found" });
+  }
+
+  const events = await Event.findAll({
+    where: {
+      groupId: groupId
+    },
+    include: [
+      {
+        model: Group,
+        attributes: ['id', 'name', 'city', 'state'],
+      },
+      {
+        model: Venue,
+        attributes: ['id', 'city', 'state'],
+      },
+    ],
+    attributes: {
+      exclude: [
+        'capacity',
+        'price',
+        'description',
+        'createdAt',
+        'updatedAt'
+      ],
+    },
+  });
+
+
+  res.status(200).json({Events: events});
+})
+
+
+router.post('/:groupId/events', requireAuth, async (req, res) => {
+  const { groupId } = req.params;
+  const {
+    venueId,
+    name,
+    type,
+    capacity,
+    price,
+    description,
+    startDate,
+    endDate
+  } = req.body;
+
+  const group = await Group.findByPk(groupId);
   if (!group) {
     return res.status(404).json({ message: "Group couldn't be found" });
   }
 
 
-  res.status(200).json({ Venues: venues });
-})
+  const currentUser = req.user;
+  const isOrganizer = group.organizerId === currentUser.id;
+  const isCoHost = await group.hasMember(currentUser.id, { through: { status: 'co-host' } });
+  if (!isOrganizer && !isCoHost) {
+    return res.status(403).json({ message: "Unauthorized: You must be the organizer or a co-host of the group" });
+  }
+
+    const event = await Event.create({
+      groupId,
+      venueId,
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate
+    });
+
+    res.status(200).json(event);
+});
 
 module.exports = router;

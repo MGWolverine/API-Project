@@ -36,9 +36,10 @@ const router = express.Router();
 
 
 
-router.put('/:venueId', requireAuth, async (req, res) => {
+router.put('/:venueId',validateVenues, requireAuth, async (req, res) => {
     const {venueId} = req.params;
     const { address, city, state, lat, lng } = req.body;
+
 
     const venue = await Venue.findByPk(venueId);
     if (!venue) {
@@ -57,7 +58,15 @@ router.put('/:venueId', requireAuth, async (req, res) => {
     venue.lng = lng;
     await venue.save();
 
-    res.status(200).json(venue);
+    res.status(200).json({
+      id: venue.id,
+      groupId: venue.groupId,
+      address: venue.address,
+      city: venue.city,
+      state: venue.state,
+      lat: venue.lat,
+      lng: venue.lng
+    });
 })
 
 

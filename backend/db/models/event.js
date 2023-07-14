@@ -19,7 +19,14 @@ module.exports = (sequelize, DataTypes) => {
         models.EventImage,
         {foreignKey: 'eventId', onDelete: 'CASCADE'}
       );
-
+      Event.belongsTo(
+        models.Group,
+        {foreignKey: 'groupId'}
+      );
+      Event.belongsTo(
+        models.Venue,
+        {foreignKey: 'venueId'}
+      );
     }
   }
   Event.init({
