@@ -2,7 +2,7 @@ const express = require('express');
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { Group, Venue, Event, sequelize, Attendance, EventImage } = require('../../db/models');
+const { Group, Venue, Event, sequelize, Attendance, EventImage, User } = require('../../db/models');
 const attendance = require('../../db/models/attendance');
 
 const validateEvents = [
@@ -156,7 +156,7 @@ router.get('/', async (req, res) => {
 // Get details of an Event specified by its id
 
 router.get('/:eventId', async (req, res) => {
-  const{eventId} = req.params
+  const eventId = req.params.eventId
   const event = await Event.findByPk(eventId, {
   include: [
     {
@@ -312,21 +312,86 @@ router.delete('/:eventId', requireAuth, async (req, res) => {
 //Get all Attendees of an Event specified by its id
 
 router.get('/:eventId/attendees', async(req, res) => {
-  const attendee = await Attendance.findAll()
+  const eventId = req.params.eventId;
 
-  res.status(200).json(attendee)
+  const event = await Event.findByPk(eventId);
+  if (!event) {
+    return res.status(404).json({ message: "Event couldn't be found" });
+  }
+  const attendee = await Attendance.findAll({
+    where: {
+      eventId: eventId
+    },
+    include: [
+      {
+        model: User,
+        attributes: [
+          'id', 'firstName', 'lastName'
+        ],
+      }
+    ],
+    attributes: {
+      exclude: [
+        'id', 'eventId', 'updatedAt', 'createdAt'
+      ]
+    }
+  })
+
+
+  res.status(200).json({ Attendees: attendee })
 })
 
 // Request to Attend an Event based on the Event's id
 
 router.post('/:eventId/attendance', requireAuth, async(req, res) => {
   const eventId = req.params.eventId;
+  const userId = req.user.id;
+
+  const event = await Event.findByPk(eventId);
+  if (!event) {
+    return res.status(404).json({ message: "Event couldn't be found" });
+  }
+
+  const attendance = await Attendance.create({
+    eventId,
+    userId,
+    status: 'pending'
+  });
+
+  res.status(200).json(attendance);
 })
 
 // Change the status of an attendance for an event specified by id
 
 router.put('/:eventId/attendance', requireAuth, async(req, res) => {
   const eventId = req.params.eventId;
+  const userId = req.params.userId;
+  const status = req.params.body;
+
+  const event = await Event.findByPk(eventId);
+  if (!event) {
+    return res.status(404).json({ message: "Event couldn't be found" });
+  }
+
+  if (status === "pending") {
+    return res.status(400).json({ message: "Cannot change an attendance status to pending" });
+  }
+
+  const attendance = await Attendance.findOne({
+    where: {
+      eventId: eventId,
+      userId: userId
+    }
+  });
+
+  if (!attendance) {
+    return res.status(404).json({ message: "Attendance between the user and the event does not exist" });
+  }
+
+  attendance.status = status;
+  await attendance.save();
+
+  res.status(200).json(attendance);
 })
 
 // Delete attendance to an event specified by id
