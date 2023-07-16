@@ -53,44 +53,67 @@ const router = express.Router();
 // Get all Events
 
 router.get('/', async (req, res) => {
-    const events = await Event.findAll({
-        include: [
-          {
-            model: Attendance,
-            where: {
-              status: 'Attending'
-            }
-          },
-          {
-            model: Group,
-            attributes: [
-              'id',
-              'name',
-              'city',
-              'state',
-            ]
-          },
-          {
-            model: Venue,
-            attributes: [
-              'id',
-              'city',
-              'state'
-            ]
-          }
-        ],
-        attributes: {
-          exclude: [
-            'capacity',
-            'price',
-            'description',
-            'createdAt',
-            'updatedAt'
-          ]
-        }
-    });
+  const {page = 1, size = 20, name, type, startDate} = req.query;
 
-    delete events.Attendances
+  const filter = {}
+
+  if (name) {
+    filter.name = name;
+  }
+
+  if (type) {
+    filter.type = type;
+  }
+
+  if (startDate) {
+    filter.startDate = startDate;
+  }
+
+  const events = await Event.findAndCountAll({
+    where: filter,
+    offset: (page - 1) * size,
+    limit: size,
+    include: [
+      {
+        model: Attendance,
+        where: {
+          status: 'attending'
+        }
+      },
+      {
+        model: Group,
+        attributes: [
+          'id',
+          'name',
+          'city',
+          'state',
+        ]
+      },
+      {
+        model: Venue,
+        attributes: [
+          'id',
+          'city',
+          'state'
+        ]
+      }
+    ],
+    attributes: {
+      exclude: [
+        'capacity',
+        'price',
+        'description',
+        'createdAt',
+        'updatedAt'
+      ]
+    }
+  });
+
+  delete events.Attendances;
+
+  const totalEvents = events.count;
+  const totalPages = Math.ceil(totalEvents / size);
+
 
     // let eventsList = [];
     //     events.forEach(event => {
@@ -105,7 +128,7 @@ router.get('/', async (req, res) => {
     //       })
     //     })
 
-  res.status(200).json({ Events: events });
+    res.status(200).json({Events: events.rows});
 });
 
 
