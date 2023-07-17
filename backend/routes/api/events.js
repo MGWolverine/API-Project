@@ -185,7 +185,7 @@ router.get('/:eventId', async (req, res) => {
     {
       model: Attendance,
       where: {
-        status: 'Attending'
+        status: 'attending'
       }
     },
     {
