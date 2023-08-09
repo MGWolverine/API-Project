@@ -482,16 +482,20 @@ router.get('/:groupId/members', async (req, res) => {
     return res.status(404).json({ message: "Group couldn't be found" });
   }
 
-  const members = await Membership.findAll({
-    where: {
-      groupId
+  const members = await User.findAll({
+    include: {
+      model: Membership,
+      as: "Memberships",
+      where: {
+        groupId: req.params.groupId,
+      },
+      attributes: ["status"],
     },
-    attributes: [
-      'status'
-    ]
-  })
+    attributes: ["id", "firstName", "lastName"],
+  });
 
-  res.status(200).json(members)
+
+  res.status(200).json({Members: members})
 })
 
 //Request a Membership for a Group based on the Group's id *
