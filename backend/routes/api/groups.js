@@ -306,7 +306,7 @@ router.post('/:groupId/venues',validateVenues, requireAuth, async (req, res) => 
   const groupId = req.params.groupId;
   const { address, city, state, lat, lng } = req.body;
 
-  const group = await Venue.findByPk(groupId);
+  const group = await Group.findByPk(groupId);
   console.log(group)
   if (!group) {
     return res.status(404).json({ message: "Group couldn't be found" });
@@ -320,8 +320,10 @@ router.post('/:groupId/venues',validateVenues, requireAuth, async (req, res) => 
       status: 'co-host'
     }
   });
+  console.log(membership)
+  console.log(group.organizerId, userId)
 
-  if (!membership && group.ownerId !== userId) {
+  if (!membership && group.organizerId !== userId) {
     return res.status(403).json({ message: "You are not authorized to create a venue for this group." });
   }
 
@@ -366,7 +368,7 @@ router.get('/:groupId/venues', requireAuth, async (req, res) => {
     }
   });
 
-  if (!membership && group.ownerId !== userId) {
+  if (!membership && group.organizerId !== userId) {
     return res.status(403).json({ message: "You are not authorized to view venues for this group." });
   }
 
@@ -504,7 +506,7 @@ router.get('/:groupId/members', async (req, res) => {
   res.status(200).json(members)
 })
 
-//Request a Membership for a Group based on the Group's id
+//Request a Membership for a Group based on the Group's id *
 
 router.post('/:groupId/membership', requireAuth, async(req, res) => {
   const groupId = req.params.groupId;
@@ -515,16 +517,41 @@ router.post('/:groupId/membership', requireAuth, async(req, res) => {
     return res.status(404).json({ message: "Group couldn't be found" });
   }
 
-  // if (status === 'member') {
-  //   return res.status(404).json({ message: "User is already a member of the group" });
-  // }
+  const existingMembership = await Membership.findOne({
+    where: {
+      groupId,
+      UserId: req.user.id,
+      status: 'member'
+    }
+  });
+
+  if (existingMembership) {
+    return res.status(400).json({ message: "User is already a member of the group" });
+  }
+
+  const pendingMembership = await Membership.findOne({
+    where: {
+      groupId,
+      UserId: req.user.id,
+      status: 'pending'
+    }
+  });
+
+  if (pendingMembership) {
+    return res.status(400).json({ message: "Membership request is already pending" });
+  }
 
   const membership = await Membership.create({
     groupId,
+    UserId: req.user.id,
     status: 'pending'
   });
+  const response = {
+    memberId: membership.id,
+    status: membership.status
+  };
 
-  res.status(200).json(membership)
+  res.status(200).json(response)
 })
 
 // Change the status of a membership for a group specified by id
@@ -547,7 +574,14 @@ router.put('/:groupId/membership', requireAuth, async (req, res) => {
     return res.status(404).json({ message: "Membership couldn't be found" });
   }
 
-  res.status(200).json(membership);
+  const response = {
+    id: membership.id,
+    groupId: membership.groupId,
+    memberId: membership.userId,
+    status: membership.status,
+  };
+
+  res.status(200).json(response);
 })
 
 // Delete membership to a group specified by id

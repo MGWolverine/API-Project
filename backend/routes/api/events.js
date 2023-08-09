@@ -44,13 +44,7 @@ const validateEvents = [
 
 const router = express.Router();
 
-// [sequelize.literal(
-//     '(SELECT COUNT(*) FROM Groups WHERE Groups.id = `Group`.id)'
-//     ),
-//   'numAttending'
-//   ],
-
-// Get all Events
+// Get all Events*
 
 router.get('/', async (req, res) => {
   const {page = 1, size = 20, name, type, startDate} = req.query;
@@ -75,10 +69,10 @@ router.get('/', async (req, res) => {
     limit: size,
     include: [
       {
-        model: Attendance,
-        where: {
-          status: 'attending'
-        }
+        model: EventImage,
+      },
+      {
+        model: Attendance
       },
       {
         model: Group,
@@ -108,75 +102,33 @@ router.get('/', async (req, res) => {
       ]
     }
   });
+  let eventsList = [];
 
-  delete events.Attendances;
+  events.rows.forEach(event => {
+    const eventJson = event.toJSON();
+    eventJson.numAttending = eventJson.Attendances.length;
+
+    eventJson.EventImages.forEach(image => {
+      if (image.preview === true) {
+        eventJson.previewImage = image.url;
+      }
+    });
+
+    delete eventJson.EventImages;
+    delete eventJson.Attendances;
+
+    eventsList.push(eventJson);
+  });
 
   const totalEvents = events.count;
   const totalPages = Math.ceil(totalEvents / size);
 
-
-    // let eventsList = [];
-    //     events.forEach(event => {
-    //       eventsList.push(event.toJSON())
-    //     });
-    //     eventsList.forEach(event => {
-    //       event.GroupImages.forEach(image => {
-    //         if (image.preview === true) {
-    //           event.previewImage = image.url
-    //         }
-    //         delete event.GroupImages
-    //       })
-    //     })
-
-    res.status(200).json({Events: events.rows});
+  res.status(200).json({Events: eventsList});
 });
 
 
 
-// const {eventId} = req.params;
-// const event = await Event.findByPk(eventId);
-// // console.log(event);
-// const venue = await Venue.findByPk(event.venueId);
-// // console.log(venue);
-// const group = await Group.findByPk(event.groupId);
-// // console.log(group);
-// const eventImage = await EventImage.findByPk(event.id);
-// // console.log(eventImage);
-// if (!event) {
-//   return res.status(404).json({ message: "Event couldn't be found" });
-// }
-// // const na = await sequelize.literal('SELECT COUNT(*) FROM Groups WHERE Groups.id ='+t.groupId);
-// // console.log(na)
-// const response = event.dataValues;
-// response.numAttending = 8; // 8 is a placeholder for now
-
-// response.Group = group.dataValues;
-// response.Group.id = group.dataValues.id;
-// response.Group.name = group.dataValues.name;
-// response.Group.private = group.dataValues.private;
-// response.Group.city = group.dataValues.city;
-// response.Group.state = group.dataValues.state;
-
-// response.Venue = venue.dataValues;
-// response.Venue.id = venue.dataValues.id;
-// response.Venue.address = venue.dataValues.address;
-// response.Venue.city = venue.dataValues.city;
-// response.Venue.state = venue.dataValues.state;
-// response.Venue.lat = venue.dataValues.lat;
-// response.Venue.lng = venue.dataValues.lng;
-
-// response.EventImage = eventImage.dataValues;
-// response.EventImage.id = eventImage.dataValues.id;
-// response.EventImage.url = eventImage.dataValues.url;
-// response.EventImage.preview = eventImage.dataValues.preview;
-
-// [sequelize.literal(
-//   '(SELECT COUNT(*) FROM Groups WHERE Groups.id = `Group`.id)'
-//   ),
-// 'numAttending'
-// ],
-
-// Get details of an Event specified by its id
+// Get details of an Event specified by its id*
 
 router.get('/:eventId', async (req, res) => {
   const eventId = req.params.eventId
@@ -226,6 +178,9 @@ router.get('/:eventId', async (req, res) => {
   },
 });
 
+if (!event) {
+  return res.status(404).json({ message: "Event couldn't be found" });
+}
 
 let response = event.toJSON()
 
