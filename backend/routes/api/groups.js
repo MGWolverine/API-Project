@@ -508,7 +508,7 @@ router.post('/:groupId/membership', requireAuth, async(req, res) => {
   const existingMembership = await Membership.findOne({
     where: {
       groupId,
-      UserId: req.user.id,
+      userId: req.user.id,
       status: 'member'
     }
   });
@@ -520,7 +520,7 @@ router.post('/:groupId/membership', requireAuth, async(req, res) => {
   const pendingMembership = await Membership.findOne({
     where: {
       groupId,
-      UserId: req.user.id,
+      userId: req.user.id,
       status: 'pending'
     }
   });
@@ -531,7 +531,7 @@ router.post('/:groupId/membership', requireAuth, async(req, res) => {
 
   const membership = await Membership.create({
     groupId,
-    UserId: req.user.id,
+    userId: req.user.id,
     status: 'pending'
   });
   const response = {
