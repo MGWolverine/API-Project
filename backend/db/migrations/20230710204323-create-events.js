@@ -80,7 +80,7 @@ module.exports = {
         },
       },
       price: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL,
         allowNull: false,
         validate: {
           isInt: {
