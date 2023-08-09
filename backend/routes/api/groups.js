@@ -119,27 +119,12 @@ router.get('/current', requireAuth, async (req, res) => {
               model: GroupImage
             }
           ],
-          attributes:[
-              'id',
-              'organizerId',
-              'name',
-              'about',
-              'type',
-              'private',
-              'city',
-              'state',
-              'createdAt',
-              'updatedAt',
-            ],
-            where: {
-              [Op.or]: [
-                {organizerId: userId},
-              ]
-            }
         });
         let groupsList = [];
         groups.forEach(group => {
-          groupsList.push(group.toJSON())
+          if (group.toJSON().organizerId === userId){
+            groupsList.push(group.toJSON())
+          }
         });
         groupsList.forEach(group => {
           group.numMembers = group.Memberships.length
@@ -147,9 +132,12 @@ router.get('/current', requireAuth, async (req, res) => {
             if (image.preview === true) {
               group.previewImage = image.url
             }
-            delete group.GroupImages
-            delete group.Memberships
-          })
+          });
+          delete group.GroupImages
+          delete group.Memberships
+          if (!group.previewImage) {
+            group.previewImage = "no image preview"
+          }
         })
         res.status(200).json({Groups: groupsList});
     }
