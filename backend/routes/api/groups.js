@@ -500,8 +500,55 @@ router.get('/:groupId/members', async (req, res) => {
     attributes: ["id", "firstName", "lastName"],
   });
 
+  if (!req.user) {
+    const filterMember = members.filter(member => member.Memberships.status !== "pending");
+    const formatMember = filterMember.map(member => ({
+      id: member.id,
+      firstName: member.firstName,
+      lastName: member.lastName,
+      Membership: {
+        status: member.Memberships ? member.Memberships.status : null,
+      },
+    }));
+    return res.status(200).json({ Members: formatMember });
+  }
 
-  res.status(200).json({Members: members})
+  const checkAuth = async (user, group) => {
+    const membership = await Membership.findOne({
+      where: {
+        groupId: group.id,
+        userId: user.id,
+        status: {
+          [Op.in]: ["organizer", "co-host"],
+        },
+      },
+    });
+
+    return membership;
+  };
+
+  if (checkAuth(req.user, group)) {
+    const formattedMembers = members.map(member => ({
+      id: member.id,
+      firstName: member.firstName,
+      lastName: member.lastName,
+      Membership: {
+        status: member.Memberships ? member.Memberships.status : null,
+      },
+    }));
+    return res.status(200).json({ Members: formattedMembers });
+  } else {
+    const filterMember = members.filter(member => member.Memberships.status !== "pending");
+    const formatMember = filterMember.map(member => ({
+      id: member.id,
+      firstName: member.firstName,
+      lastName: member.lastName,
+      Membership: {
+        status: member.Memberships ? member.Memberships.status : null,
+      },
+    }));
+    return res.status(200).json({ Members: formatMember });
+  }
 })
 
 //Request a Membership for a Group based on the Group's id *
@@ -696,7 +743,7 @@ router.delete('/:groupId/membership', requireAuth, async(req, res) => {
 
   if (req.user.id === memberId) {
     await membership.destroy();
-    return res.status(200).json({ message: 'Successfully deleted' });
+    return res.status(200).json({ message: 'Successfully deleted membership from group' });
   } else {
     return res.status(401).json({"message": "Not Authorized"})
   }
