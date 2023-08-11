@@ -396,7 +396,8 @@ router.get('/:groupId/events', async (req, res) => {
     },
     include: [
       {
-        model: Attendance
+        model: Attendance,
+        as: 'Attendances'
       },
       {
         model: EventImage
@@ -528,7 +529,7 @@ router.get('/:groupId/members', async (req, res) => {
   };
 
   if (checkAuth(req.user, group)) {
-    const formattedMembers = members.map(member => ({
+    const formatMembers = members.map(member => ({
       id: member.id,
       firstName: member.firstName,
       lastName: member.lastName,
@@ -536,7 +537,7 @@ router.get('/:groupId/members', async (req, res) => {
         status: member.Memberships ? member.Memberships.status : null,
       },
     }));
-    return res.status(200).json({ Members: formattedMembers });
+    return res.status(200).json({ Members: formatMembers });
   } else {
     const filterMember = members.filter(member => member.Memberships.status !== "pending");
     const formatMember = filterMember.map(member => ({
