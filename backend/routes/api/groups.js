@@ -191,7 +191,6 @@ router.post('/', validateGroups, requireAuth, async (req, res) => {
     const { name, about, type, private, city, state } = req.body;
     const UserID = req.user.id;
 
-    try {
       const createdGroup = await Group.create({
         organizerId: UserID,
         name,
@@ -209,9 +208,7 @@ router.post('/', validateGroups, requireAuth, async (req, res) => {
       })
 
       res.status(201).json(createdGroup);
-    } catch (error) {
-      res.status(400).json({ message: 'Bad Request', error });
-    }
+
   });
 
 //Create and return a new image for a group specified by id.*
