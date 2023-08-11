@@ -498,19 +498,6 @@ router.get('/:groupId/members', async (req, res) => {
     attributes: ["id", "firstName", "lastName"],
   });
 
-  if (!req.user) {
-    const filterMember = members.filter(member => member.Memberships.status !== "pending");
-    const formatMember = filterMember.map(member => ({
-      id: member.id,
-      firstName: member.firstName,
-      lastName: member.lastName,
-      Membership: {
-        status: member.Memberships ? member.Memberships.status : null,
-      },
-    }));
-    return res.status(200).json({ Members: formatMember });
-  }
-
   const checkAuth = async (user, group) => {
     const membership = await Membership.findOne({
       where: {
@@ -525,29 +512,24 @@ router.get('/:groupId/members', async (req, res) => {
     return membership;
   };
 
-  if (checkAuth(req.user, group)) {
-    const formatMembers = members.map(member => ({
-      id: member.id,
-      firstName: member.firstName,
-      lastName: member.lastName,
-      Membership: {
-        status: member.Memberships ? member.Memberships.status : null,
-      },
-    }));
+  const userAuthorized = await checkAuth(req.user, group);
+
+  const formatMembers = members.map(member => ({
+    id: member.id,
+    firstName: member.firstName,
+    lastName: member.lastName,
+    Membership: {
+      status: member.Memberships[0] ? member.Memberships[0].status : null,
+    },
+  }));
+
+  if (userAuthorized) {
     return res.status(200).json({ Members: formatMembers });
   } else {
-    const filterMember = members.filter(member => member.Memberships.status !== "pending");
-    const formatMember = filterMember.map(member => ({
-      id: member.id,
-      firstName: member.firstName,
-      lastName: member.lastName,
-      Membership: {
-        status: member.Memberships ? member.Memberships.status : null,
-      },
-    }));
-    return res.status(200).json({ Members: formatMember });
+    const filterMember = formatMembers.filter(member => member.Membership.status !== "pending");
+    return res.status(200).json({ Members: filterMember });
   }
-})
+});
 
 //Request a Membership for a Group based on the Group's id *
 
