@@ -478,58 +478,64 @@ router.post('/:groupId/events', requireAuth, async (req, res) => {
 // Get all Members of a Group specified by its id
 
 router.get('/:groupId/members', async (req, res) => {
-  const groupId = req.params.groupId;
+  try {
+    const groupId = req.params.groupId;
+    const group = await Group.findByPk(groupId);
 
-  const group = await Group.findByPk(groupId);
+    if (!group) {
+      return res.status(404).json({ message: "Group couldn't be found" });
+    }
 
-  if (!group) {
-    return res.status(404).json({ message: "Group couldn't be found" });
-  }
-
-  const members = await User.findAll({
-    include: {
-      model: Membership,
-      as: "Memberships",
-      where: {
-        groupId: req.params.groupId,
-      },
-      attributes: ["status"],
-    },
-    attributes: ["id", "firstName", "lastName"],
-  });
-
-  const checkAuth = async (user, group) => {
-    const membership = await Membership.findOne({
-      where: {
-        groupId: group.id,
-        userId: user.id,
-        status: {
-          [Op.in]: ["organizer", "co-host"],
+    const members = await User.findAll({
+      include: {
+        model: Membership,
+        as: "Memberships",
+        where: {
+          groupId: req.params.groupId,
         },
+        attributes: ["status"],
       },
+      attributes: ["id", "firstName", "lastName"],
     });
 
-    return membership;
-  };
+    const checkAuth = async (user, group) => {
+      const membership = await Membership.findOne({
+        where: {
+          groupId: group.id,
+          userId: user.id,
+          status: {
+            [Op.in]: ["organizer", "co-host"],
+          },
+        },
+      });
 
-  const userAuthorized = await checkAuth(req.user, group);
+      return membership;
+    };
 
-  const formatMembers = members.map(member => ({
+    const userAuthorized = await checkAuth(req.user, group);
+    const formatMembers = formatMembersList(members, userAuthorized);
+
+    return res.status(200).json({ Members: formatMembers });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+function formatMembersList(members, userAuthorized) {
+  return members.map(member => ({
     id: member.id,
     firstName: member.firstName,
     lastName: member.lastName,
     Membership: {
       status: member.Memberships[0] ? member.Memberships[0].status : null,
     },
-  }));
-
-  if (userAuthorized) {
-    return res.status(200).json({ Members: formatMembers });
-  } else {
-    const filterMember = formatMembers.filter(member => member.Membership.status !== "pending");
-    return res.status(200).json({ Members: filterMember });
-  }
-});
+  })).filter(member => {
+    if (userAuthorized) {
+      return true;
+    }
+    return member.Membership.status !== "pending";
+  });
+}
 
 //Request a Membership for a Group based on the Group's id *
 
