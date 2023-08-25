@@ -533,7 +533,7 @@ function formatMembersList(members, userAuthorized) {
     if (userAuthorized) {
       return true;
     }
-    return member.Membership.status !== "pending";
+    return member.Memberships[0] && member.Memberships[0].status !== "pending";
   });
 }
 
