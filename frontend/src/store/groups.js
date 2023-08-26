@@ -25,7 +25,7 @@ export const loadGroups = (groups) => ({
     groupId,
   });
 
-//! Thunks
+//! --------- Thunks -----------
 
 //! Reducer
 const groupsReducer = (state = [], action) => {

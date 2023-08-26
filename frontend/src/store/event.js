@@ -25,7 +25,7 @@ export const loadEvents = (events) => ({
     eventId,
   });
 
-//! Thunks
+//! --------- Thunks -----------
 
 //! Reducer
 const eventsReducer = (state = [], action) => {
