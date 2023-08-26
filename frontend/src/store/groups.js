@@ -27,6 +27,16 @@ export const loadGroups = (groups) => ({
 
 //! --------- Thunks -----------
 
+//todo Get All Groups
+
+export const retrieveAllGroups = () => async (dispatch, getState) => {
+  const response = await fetch('path', {})
+  const data = res.json()
+
+  const action = loadGroups(data)
+  dispatch(action)
+}
+
 //! Reducer
 const groupsReducer = (state = [], action) => {
   switch (action.type) {

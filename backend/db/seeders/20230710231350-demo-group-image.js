@@ -12,17 +12,17 @@ module.exports = {
     await GroupImage.bulkCreate([
       {
         groupId: 1,
-        url: "www.url1.com",
+        url: "https://i.imgur.com/OeESOd4.jpg",
         preview: true
       },
       {
         groupId: 2,
-        url: "www.url2.com",
+        url: "https://i.imgur.com/c8KdpiC.png",
         preview: true
       },
       {
         groupId: 3,
-        url: "www.url3.com",
+        url: "https://i.imgur.com/SSVLmrV.png",
         preview: true
       }
     ])

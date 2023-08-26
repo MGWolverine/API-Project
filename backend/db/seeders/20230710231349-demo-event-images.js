@@ -12,7 +12,7 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: "www.url1.com",
+        url: "https://i.imgur.com/OeESOd4.jpg",
         preview: true
       },
       {
@@ -33,7 +33,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       url: { [Op.in]: [
-        'www.url1.com', 'www.url1.com', 'www.url3.com'
+        'https://i.imgur.com/OeESOd4.jpg', 'https://i.imgur.com/c8KdpiC.png', 'https://i.imgur.com/SSVLmrV.png'
       ] }
     }, {});
   }
