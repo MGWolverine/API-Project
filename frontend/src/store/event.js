@@ -28,3 +28,19 @@ export const loadEvents = (events) => ({
 //! Thunks
 
 //! Reducer
+const eventsReducer = (state = [], action) => {
+  switch (action.type) {
+    case LOAD_EVENTS:
+      return [];
+    case RECEIVE_EVENT:
+      return [];
+    case UPDATE_EVENT:
+      return [];
+    case REMOVE_EVENT:
+      return [];
+    default:
+      return state;
+  }
+};
+
+export default eventsReducer

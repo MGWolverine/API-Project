@@ -5,6 +5,8 @@ import sessionReducer from "./session";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  groups: groupsReducer,
+  events: eventsReducer,
 });
 
 let enhancer;

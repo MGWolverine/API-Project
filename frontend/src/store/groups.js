@@ -28,3 +28,19 @@ export const loadGroups = (groups) => ({
 //! Thunks
 
 //! Reducer
+const groupsReducer = (state = [], action) => {
+  switch (action.type) {
+    case LOAD_GROUPS:
+      return [];
+    case RECEIVE_GROUP:
+      return [];
+    case UPDATE_GROUP:
+      return [];
+    case REMOVE_GROUP:
+      return [];
+    default:
+      return state;
+  }
+};
+
+export default groupsReducer
