@@ -28,7 +28,7 @@ export const loadEvents = (events) => ({
 //! --------- Thunks -----------
 
 //! Reducer
-const eventsReducer = (state = [], action) => {
+const eventsReducer = (state = {}, action) => {
   switch (action.type) {
     case LOAD_EVENTS:
       return [];

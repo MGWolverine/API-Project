@@ -5,10 +5,12 @@ const UPDATE_GROUP = 'groups/UPDATE_GROUP';
 const REMOVE_GROUP = 'groups/REMOVE_GROUP';
 
 //! Actions
-export const loadGroups = (groups) => ({
+export const loadGroups = (groups) => {
+  return {
     type: LOAD_GROUPS,
     groups,
-  });
+  }
+  };
 
   export const receiveGroup = (group) => ({
     type: RECEIVE_GROUP,
@@ -29,19 +31,33 @@ export const loadGroups = (groups) => ({
 
 //todo Get All Groups
 
-export const retrieveAllGroups = () => async (dispatch, getState) => {
-  const response = await fetch('path', {})
-  const data = res.json()
+export const retrieveAllGroups = () => async (dispatch) => {
+  const response = await fetch('/api/groups', {
+    method: "GET",
+    headers: {"Content-Type": "application/json"},
+  })
+  if (response.ok) {
+    const data = await response.json()
+    const action = loadGroups(data)
+    await dispatch(action)
+    return data
+  } else {
+    const data = response.json()
+    return data
+  }
 
-  const action = loadGroups(data)
-  dispatch(action)
 }
 
 //! Reducer
-const groupsReducer = (state = [], action) => {
+const initialState = {allGroups: {}}
+const groupsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_GROUPS:
-      return [];
+      const loadedGroups = {};
+      action.groups.allGroups.forEach(group => {
+        loadedGroups[group.id] = group;
+      });
+      return {...state, allGroups: loadedGroups};
     case RECEIVE_GROUP:
       return [];
     case UPDATE_GROUP:

@@ -102,7 +102,7 @@ router.get('/', requireAuth, async (req, res) => {
           })
         })
 
-        res.status(200).json({Groups: groupsList});
+        res.status(200).json({allGroups: groupsList});
     }
 );
 
