@@ -13,21 +13,21 @@ module.exports = {
       {
         venueId: 1,
         groupId: 1,
-        name: "Boxing in the Park",
-        description: "We gonna be boxing in the park",
+        name: "Running in the Park",
+        description: "We will be going for a nice run in the Park starting at 8:30 AM. Feel free to join!",
         type: "In person",
         capacity: 20,
-        price: 20,
+        price: 5,
         startDate: '2023-02-25',
         endDate: '2023-02-26'
       },
       {
         venueId: 2,
         groupId: 2,
-        name: "Run on the Beach",
-        description: "We gonna be running on the beach",
+        name: "DOOM in the 90's",
+        description: "90's themed DOOM Lan party, be there or be square!",
         type: "In person",
-        capacity: 50,
+        capacity: 6,
         price: 20,
         startDate: '2023-03-25',
         endDate: '2023-03-26'
@@ -35,8 +35,8 @@ module.exports = {
       {
         venueId: 3,
         groupId: 3,
-        name: "Hiking in the Mountains",
-        description: "We gonna be hiking in the mountains",
+        name: "Barn Dance, Welcome All!",
+        description: "Hey! just a group of people trying to get some social distancing square dancing done in this barn!",
         type: "In person",
         capacity: 10,
         price: 10,
@@ -51,7 +51,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       name: { [Op.in]: [
-        'Boxing in the Park', 'Run on the Beach', 'Hiking in the Mountains'
+        'Running in the Park', "DOOM in the 90's", 'Hiking in the Mountains'
       ] }
     }, {});
   }
