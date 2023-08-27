@@ -4,6 +4,7 @@ const HomePage = () => {
     return (
         <div className="homepage">
             <section className="container1">
+                <img src='https://i.imgur.com/9ti3y68.png'></img>
                 <div className="info">
                 <h1 className="title">The people platform—Where interests become friendships</h1>
                 <p className="subtitle">
@@ -20,6 +21,7 @@ const HomePage = () => {
                 </p>
             </section>
             <section className="container3">
+                <img src='https://i.imgur.com/wKetZC8.png'></img>
                 <div className="seeAllGroups">
                 <Link className="link seeAllGroups" to="/groups">
                     See all groups
@@ -29,6 +31,7 @@ const HomePage = () => {
                 </p>
                 </div>
                 <div className="findAnEvent">
+                <img src='https://i.imgur.com/FeDQGGH.png'></img>
                 <Link className="link findevent" to="/events">
                     Find an event
                 </Link>
@@ -36,8 +39,8 @@ const HomePage = () => {
                     Events are happening on just about any topic you can think of, from online gaming and photography to yoga and hiking.
                 </p>
                 </div>
-
                 <div>
+                <img src='https://i.imgur.com/g2nNOLu.png'></img>
                 <Link className="link startGroup" to="/groups/new">
                     Start a new group
                 </Link>
