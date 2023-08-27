@@ -22,7 +22,7 @@ const EventsList = () => {
             </ul>
             <div>
                 {events.map((event) => (
-                    <div key={event.id}>{console.log("EVENT", event)}
+                    <div key={event.id}>
                         <img src={event.previewImage}></img>
                         <h2>{event.name}</h2>
                         <p>{event.startDate}</p>

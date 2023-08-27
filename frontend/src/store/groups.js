@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf";
+
 //! Types
 const LOAD_GROUPS = 'groups/LOAD_GROUPS';
 const RECEIVE_GROUP = 'groups/RECEIVE_GROUP';
@@ -32,7 +34,7 @@ export const loadGroups = (groups) => {
 //* Get All Groups
 
 export const retrieveAllGroups = () => async (dispatch) => {
-  const response = await fetch('/api/groups', {
+  const response = await csrfFetch('/api/groups', {
     method: "GET",
     headers: {"Content-Type": "application/json"},
   })
@@ -47,9 +49,31 @@ export const retrieveAllGroups = () => async (dispatch) => {
   }
 }
 
+//* Get details of a Group from an id
+
+export const retrieveSingleGroup = (groupId) => async (dispatch) => {
+  try {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      console.error("Error response from server:", response);
+      return;
+    }
+
+    const data = await response.json();
+    dispatch(receiveGroup(data));
+  } catch (error) {
+    console.error("Network error:", error);
+  }
+};
+
 //! Reducer
-const initialState = {allGroups: {}}
+const initialState = {allGroups: {}, singleGroup: {}};
 const groupsReducer = (state = initialState, action) => {
+  console.log('Reducer is executing:', action.type);
   switch (action.type) {
     case LOAD_GROUPS:
       const loadedGroups = {};
@@ -58,7 +82,8 @@ const groupsReducer = (state = initialState, action) => {
       });
       return {...state, allGroups: loadedGroups};
     case RECEIVE_GROUP:
-      return [];
+      console.log('RECEIVE_GROUP action data:', action.group);
+      return {...state, singleGroup: {[action.group.id]: action.group}};
     case UPDATE_GROUP:
       return [];
     case REMOVE_GROUP:
