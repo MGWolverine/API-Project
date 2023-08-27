@@ -29,7 +29,7 @@ export const loadGroups = (groups) => {
 
 //! --------- Thunks -----------
 
-//todo Get All Groups
+//* Get All Groups
 
 export const retrieveAllGroups = () => async (dispatch) => {
   const response = await fetch('/api/groups', {
@@ -45,7 +45,6 @@ export const retrieveAllGroups = () => async (dispatch) => {
     const data = response.json()
     return data
   }
-
 }
 
 //! Reducer

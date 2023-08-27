@@ -22,7 +22,7 @@ const GroupsList = () => {
             </ul>
             <div>
                 {groups.map((group) => (
-                    <div key={group.id}>{console.log("GROUP", group)}
+                    <div key={group.id}>
                         <img src={group.previewImage}></img>
                         <h2>{group.name}</h2>
                         <p>{group.city}</p>

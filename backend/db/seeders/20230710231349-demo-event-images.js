@@ -17,12 +17,12 @@ module.exports = {
       },
       {
         eventId: 2,
-        url: "www.url2.com",
+        url: "https://i.imgur.com/c8KdpiC.png",
         preview: true
       },
       {
         eventId: 3,
-        url: "www.url3.com",
+        url: "https://i.imgur.com/SSVLmrV.png",
         preview: true
       }
     ])

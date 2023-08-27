@@ -138,7 +138,7 @@ router.get('/', validateQueryParameters , async (req, res) => {
 
     eventsList.push(eventJson);
   });
-  res.status(200).json({Events: eventsList});
+  res.status(200).json({allEvents: eventsList});
 });
 
 

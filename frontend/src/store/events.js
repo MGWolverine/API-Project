@@ -27,11 +27,34 @@ export const loadEvents = (events) => ({
 
 //! --------- Thunks -----------
 
+//* Get All Events
+
+export const retrieveAllEvents = () => async (dispatch) => {
+  const response = await fetch('/api/events', {
+    method: "GET",
+    headers: {"Content-Type": "application/json"},
+  })
+  if (response.ok) {
+    const data = await response.json()
+    const action = loadEvents(data)
+    await dispatch(action)
+    return data
+  } else {
+    const data = response.json()
+    return data
+  }
+}
+
 //! Reducer
-const eventsReducer = (state = {}, action) => {
+const initialState = {allEvents: {}}
+const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_EVENTS:
-      return [];
+      const loadedEvents = {};
+      action.events.allEvents.forEach(event => {
+        loadEvents[event.id] = event;
+      });
+      return {...state, allEvents: loadEvents};
     case RECEIVE_EVENT:
       return [];
     case UPDATE_EVENT:
