@@ -1,3 +1,31 @@
 .profile-dropdown.hidden {
     display: none;
 }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.homeButton {
+    background-color: #008FA3;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px 20px;
+
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.homeLink {
+    text-decoration: none;
+    color: #D9EEF1;
+}
+
+.profileButton {
+    cursor: pointer;
+}

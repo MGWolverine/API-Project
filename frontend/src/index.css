@@ -1,1 +1,12 @@
 /* TODO Add site wide styles */
+#root {
+    width: 80%;
+}
+
+body {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-self: center;
+    justify-content: center;
+}
