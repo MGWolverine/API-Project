@@ -1,9 +1,13 @@
 const express = require('express');
+
+const { Op } = require('sequelize');
+
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { Group, Venue, Event, sequelize, Attendance, EventImage, User } = require('../../db/models');
+const { Group, Venue, Event, sequelize, Attendance, EventImage, User, Membership } = require('../../db/models');
 const attendance = require('../../db/models/attendance');
+const { query } = require('express');
 
 const validateEvents = [
   check('venueId')
@@ -41,44 +45,53 @@ const validateEvents = [
   handleValidationErrors,
 ];
 
+const validateQueryParameters = [
+  check("page")
+    .optional()
+    .isInt({ min: 1 }, { max: 10 })
+    .withMessage("Page must be greater than or equal to 1"),
+  check("size")
+    .optional()
+    .isInt({ min: 1, max: 20 })
+    .withMessage("Size must be between 1 and 20"),
+  check("name").optional().isString().withMessage("Name must be a string"),
+  check("type")
+    .optional()
+    .isIn(["Online", "In Person"])
+    .withMessage("Type must be 'Online' or 'In Person'"),
+  check("startDate")
+    .optional()
+    .isDate()
+    .withMessage("Start date must be a valid datetime"),
+  handleValidationErrors,
+];
 
 const router = express.Router();
 
-// [sequelize.literal(
-//     '(SELECT COUNT(*) FROM Groups WHERE Groups.id = `Group`.id)'
-//     ),
-//   'numAttending'
-//   ],
+// Get all Events*
 
-// Get all Events
+router.get('/', validateQueryParameters , async (req, res) => {
+  let query = {
+    where: {},
+  };
 
-router.get('/', async (req, res) => {
-  const {page = 1, size = 20, name, type, startDate} = req.query;
+  const page = req.query.page === undefined ? 1 : parseInt(req.query.page);
+  const size = req.query.size === undefined ? 20 : parseInt(req.query.size);
 
-  const filter = {}
-
-  if (name) {
-    filter.name = name;
-  }
-
-  if (type) {
-    filter.type = type;
-  }
-
-  if (startDate) {
-    filter.startDate = startDate;
+  if (page >= 1 && size >= 1) {
+    query.limit = size;
+    query.offset = size * (page - 1);
   }
 
   const events = await Event.findAndCountAll({
-    where: filter,
-    offset: (page - 1) * size,
-    limit: size,
+    ...query,
     include: [
       {
+        model: EventImage,
+      },
+      {
         model: Attendance,
-        where: {
-          status: 'attending'
-        }
+        as: 'Attendances'
       },
       {
         model: Group,
@@ -102,140 +115,96 @@ router.get('/', async (req, res) => {
       exclude: [
         'capacity',
         'price',
-        'description',
         'createdAt',
         'updatedAt'
       ]
     }
   });
+  let eventsList = [];
 
-  delete events.Attendances;
+  events.rows.forEach(event => {
+    const eventJson = event.toJSON();
+    eventJson.numAttending = eventJson.Attendances.length;
 
-  const totalEvents = events.count;
-  const totalPages = Math.ceil(totalEvents / size);
+    eventJson.EventImages.forEach(image => {
+      if (image.preview === true) {
+        eventJson.previewImage = image.url;
+      }
+    });
 
+    delete eventJson.EventImages;
+    delete eventJson.Attendances;
 
-    // let eventsList = [];
-    //     events.forEach(event => {
-    //       eventsList.push(event.toJSON())
-    //     });
-    //     eventsList.forEach(event => {
-    //       event.GroupImages.forEach(image => {
-    //         if (image.preview === true) {
-    //           event.previewImage = image.url
-    //         }
-    //         delete event.GroupImages
-    //       })
-    //     })
-
-    res.status(200).json({Events: events.rows});
+    eventsList.push(eventJson);
+  });
+  res.status(200).json({allEvents: eventsList});
 });
 
 
 
-// const {eventId} = req.params;
-// const event = await Event.findByPk(eventId);
-// // console.log(event);
-// const venue = await Venue.findByPk(event.venueId);
-// // console.log(venue);
-// const group = await Group.findByPk(event.groupId);
-// // console.log(group);
-// const eventImage = await EventImage.findByPk(event.id);
-// // console.log(eventImage);
-// if (!event) {
-//   return res.status(404).json({ message: "Event couldn't be found" });
-// }
-// // const na = await sequelize.literal('SELECT COUNT(*) FROM Groups WHERE Groups.id ='+t.groupId);
-// // console.log(na)
-// const response = event.dataValues;
-// response.numAttending = 8; // 8 is a placeholder for now
-
-// response.Group = group.dataValues;
-// response.Group.id = group.dataValues.id;
-// response.Group.name = group.dataValues.name;
-// response.Group.private = group.dataValues.private;
-// response.Group.city = group.dataValues.city;
-// response.Group.state = group.dataValues.state;
-
-// response.Venue = venue.dataValues;
-// response.Venue.id = venue.dataValues.id;
-// response.Venue.address = venue.dataValues.address;
-// response.Venue.city = venue.dataValues.city;
-// response.Venue.state = venue.dataValues.state;
-// response.Venue.lat = venue.dataValues.lat;
-// response.Venue.lng = venue.dataValues.lng;
-
-// response.EventImage = eventImage.dataValues;
-// response.EventImage.id = eventImage.dataValues.id;
-// response.EventImage.url = eventImage.dataValues.url;
-// response.EventImage.preview = eventImage.dataValues.preview;
-
-// [sequelize.literal(
-//   '(SELECT COUNT(*) FROM Groups WHERE Groups.id = `Group`.id)'
-//   ),
-// 'numAttending'
-// ],
-
-// Get details of an Event specified by its id
+// Get details of an Event specified by its id*
 
 router.get('/:eventId', async (req, res) => {
-  const eventId = req.params.eventId
+  const eventId = req.params.eventId;
+
   const event = await Event.findByPk(eventId, {
-  include: [
-    {
-      model: Attendance,
-      where: {
-        status: 'Attending'
+    include: [
+      {
+        model: Group,
+        attributes: [
+          'id',
+          'name',
+          'private',
+          'city',
+          'state'
+        ],
+      },
+      {
+        model: Venue,
+        attributes: [
+          'id',
+          'address',
+          'city',
+          'state',
+          'lat',
+          'lng'
+        ],
+      },
+      {
+        model: EventImage,
+        attributes: [
+          'id',
+          'url',
+          'preview'
+        ],
+      },
+      {
+        model: Attendance,
+        as: 'Attendances',
       }
-    },
-    {
-      model: Group,
-      attributes: [
-        'id',
-        'name',
-        'private',
-        'city',
-        'state'
-      ],
-    },
-    {
-      model: Venue,
-      attributes: [
-        'id',
-        'address',
-        'city',
-        'state',
-        'lat',
-        'lng'
-      ],
-    },
-    {
-      model: EventImage,
-      attributes: [
-        'id',
-        'url',
-        'preview'
-      ],
-    },
-  ],
-  attributes: {
-    exclude: [
-      'createdAt',
-      'updatedAt'
     ],
-  },
+    attributes: {
+      exclude: [
+        'createdAt',
+        'updatedAt'
+      ],
+    },
+  });
+
+  if (!event) {
+    return res.status(404).json({ message: "Event couldn't be found" });
+  }
+
+  const attendances = event.Attendances || [];
+
+  const attendingAttendances = attendances.filter(attendance => attendance.status === 'attending');
+
+  const response = event.toJSON();
+  response.numAttending = attendingAttendances;
+  delete response.Attendances
+
+  res.status(200).json(response);
 });
-
-
-let response = event.toJSON()
-
-response.numAttending = response.Attendances.length;
-
-delete response.Attendances
-
-res.status(200).json(response);
-
-})
 
 
 // Edit an Event specified by its id
@@ -337,36 +306,57 @@ router.delete('/:eventId', requireAuth, async (req, res) => {
 router.get('/:eventId/attendees', async(req, res) => {
   const eventId = req.params.eventId;
 
-  const event = await Event.findByPk(eventId);
+  const event = await Event.findByPk(eventId, {
+    include: {
+      model: Group,
+      include: Membership,
+    },
+  });
+
   if (!event) {
     return res.status(404).json({ message: "Event couldn't be found" });
   }
-  const attendee = await Attendance.findAll({
-    where: {
-      eventId: eventId
-    },
-    include: [
-      {
-        model: User,
-        attributes: [
-          'id', 'firstName', 'lastName'
-        ],
-      }
-    ],
-    attributes: {
-      exclude: [
-        'id', 'eventId', 'updatedAt', 'createdAt'
-      ]
-    }
-  })
 
+  const checkAuth = event.Group.organizerId === req.params.userId ||
+    event.Group.Memberships.some(
+      membership => membership.userId === req.params.userId && membership.status === "co-host"
+    );
+  let allAttendees = [];
+  if (checkAuth) {
+    allAttendees = await User.findAll({
+      include: {
+        model: Attendance,
+        as: "Attendances",
+        where: {
+          eventId: eventId,
+        },
+        attributes: ["status"],
+      },
+      attributes: ["id", "firstName", "lastName"],
+    });
+  } else {
+    allAttendees = await User.findAll({
+      include: {
+        model: Attendance,
+        as: "Attendances",
+        where: {
+          eventId: eventId,
+          status: {
+            [Op.not]: "pending",
+          },
+        },
+        attributes: ["status"],
+      },
+      attributes: ["id", "firstName", "lastName"],
+    });
+  }
 
-  res.status(200).json({ Attendees: attendee })
+  res.status(200).json({ Attendees: allAttendees })
 })
 
 // Request to Attend an Event based on the Event's id
 
-router.post('/:eventId/attendance', requireAuth, async(req, res) => {
+router.post('/:eventId/attendance', requireAuth, async (req, res) => {
   const eventId = req.params.eventId;
   const userId = req.user.id;
 
@@ -375,25 +365,59 @@ router.post('/:eventId/attendance', requireAuth, async(req, res) => {
     return res.status(404).json({ message: "Event couldn't be found" });
   }
 
+  const existingAttendance = await Attendance.findOne({
+    where: {
+      eventId: eventId,
+      userId: userId,
+      status: { [Op.ne]: 'pending' },
+    }
+  });
+
+  if (existingAttendance) {
+    if (existingAttendance.status === 'pending') {
+      return res.status(400).json({ message: "Attendance has already been requested" });
+    } else {
+      return res.status(400).json({ message: "User is already an attendee of the event" });
+    }
+  }
+
   const attendance = await Attendance.create({
-    eventId,
-    userId,
+    eventId: eventId,
+    userId: userId,
     status: 'pending'
   });
 
-  res.status(200).json(attendance);
-})
+  res.status(200).json({ userId: attendance.userId, status: attendance.status });
+});
+
 
 // Change the status of an attendance for an event specified by id
 
-router.put('/:eventId/attendance', requireAuth, async(req, res) => {
+router.put('/:eventId/attendance', requireAuth, async (req, res) => {
   const eventId = req.params.eventId;
-  const userId = req.params.userId;
-  const status = req.params.body;
+  const userId = req.user.id;
+  const { userId: requestedUserId, status } = req.body;
 
-  const event = await Event.findByPk(eventId);
+  const event = await Event.findByPk(eventId, {
+    include: {
+      model: Group,
+      include: {
+        model: Membership,
+      }
+    },
+  });
+
   if (!event) {
     return res.status(404).json({ message: "Event couldn't be found" });
+  }
+
+  const checkAuth = event.Group.organizerId === userId ||
+    event.Group.Memberships.some(
+      membership => membership.userId === userId && membership.status === "co-host"
+    );
+
+  if (!checkAuth) {
+    return res.status(403).json({ message: "Unauthorized: User is not the organizer or co-host" });
   }
 
   if (status === "pending") {
@@ -403,7 +427,7 @@ router.put('/:eventId/attendance', requireAuth, async(req, res) => {
   const attendance = await Attendance.findOne({
     where: {
       eventId: eventId,
-      userId: userId
+      userId: requestedUserId
     }
   });
 
@@ -414,23 +438,52 @@ router.put('/:eventId/attendance', requireAuth, async(req, res) => {
   attendance.status = status;
   await attendance.save();
 
-  res.status(200).json(attendance);
-})
+  res.status(200).json({ id: attendance.id, eventId: attendance.eventId, userId: attendance.userId, status: attendance.status });
+});
 
 // Delete attendance to an event specified by id
 
 router.delete('/:eventId/attendance', requireAuth, async (req, res) => {
   const eventId = req.params.eventId;
+  const userId = req.user.id;
+  const { userId: requestedUserId } = req.body;
 
-  const event = await Event.findByPk(eventId);
+  const event = await Event.findByPk(eventId, {
+    include: {
+      model: Group,
+      include: {
+        model: Membership,
+      }
+    },
+  });
 
   if (!event) {
     return res.status(404).json({ message: "Event couldn't be found" });
   }
 
-  await event.destroy()
+  const checkAuth = event.Group.organizerId === userId ||
+    event.Group.Memberships.some(
+      membership => membership.userId === userId && membership.status === "co-host"
+    );
 
-  res.status(200).json({ message: 'Successfully deleted' });
-})
+  if (!checkAuth && userId !== requestedUserId) {
+    return res.status(403).json({ message: "Only the User or organizer may delete an Attendance" });
+  }
+
+  const attendance = await Attendance.findOne({
+    where: {
+      eventId: eventId,
+      userId: requestedUserId
+    }
+  });
+
+  if (!attendance) {
+    return res.status(404).json({ message: "Attendance does not exist for this User" });
+  }
+
+  await attendance.destroy();
+
+  res.status(200).json({ message: "Successfully deleted attendance from event" });
+});
 
 module.exports = router;

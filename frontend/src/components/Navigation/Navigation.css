@@ -1,0 +1,29 @@
+.profile-dropdown.hidden {
+    display: none;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.homeLink {
+    text-decoration: none;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif ;
+    font-size: x-large;
+    color: #F64060;
+}
+
+.profile-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+.profile-button i {
+    font-size: 24px;
+    color: #F64060;
+}
+
