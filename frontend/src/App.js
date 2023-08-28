@@ -24,7 +24,7 @@ function App() {
         <Route exact path='/' component={HomePage} />
         <Route exact path='/groups' component={GroupsList} />
         <Route exact path='/events' component={EventsList} />
-        <Route exact path='/groups/:groupId' component={GroupDetails} />
+        <Route path='/groups/:groupId' component={GroupDetails} />
       </Switch>)}
     </>
   );

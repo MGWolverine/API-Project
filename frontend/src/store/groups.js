@@ -53,6 +53,7 @@ export const retrieveAllGroups = () => async (dispatch) => {
 
 export const retrieveSingleGroup = (groupId) => async (dispatch) => {
   try {
+    console.log("LOOK AT MY ID" + groupId)
     const response = await csrfFetch(`/api/groups/${groupId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
