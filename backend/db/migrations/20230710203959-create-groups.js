@@ -31,7 +31,7 @@ module.exports = {
         }
       },
       about: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
         validate: {
           len: [50, Infinity],
