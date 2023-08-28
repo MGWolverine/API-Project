@@ -4,6 +4,10 @@ import './HomePage.css';
 
 const HomePage = () => {
     const sessionUser = useSelector(state => state.session.user);
+
+    function helper() {
+        console.log("")
+    }
     return (
         <div className="homepage">
             <div className='body'>
