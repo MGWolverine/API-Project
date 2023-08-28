@@ -16,6 +16,14 @@
     color: #F64060;
 }
 
-.profileButton {
+.profile-button {
+    background: none;
+    border: none;
     cursor: pointer;
+  }
+
+.profile-button i {
+    font-size: 24px;
+    color: #F64060;
 }
+

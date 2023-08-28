@@ -1,7 +1,9 @@
+import { useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
 import './HomePage.css';
 
 const HomePage = () => {
+    const sessionUser = useSelector(state => state.session.user);
     return (
         <div className="homepage">
             <div className='body'>
@@ -43,9 +45,14 @@ const HomePage = () => {
                 </div>
                 <div>
                     <img src='https://i.imgur.com/g2nNOLu.png'></img>
-                    <Link className="link startGroup" to="/groups/new">
-                        Start a new group
-                    </Link>
+                    {sessionUser ? (
+                        <Link className="link startGroup" to="/groups/new">
+                            Start a new group
+                        </Link>
+                    ) : (
+                        <p className="link startGroup" style={{color:"grey"}}>Start a new group</p>
+                    )
+                    }
                     <p className="subtitle">
                         You don’t have to be an expert to gather people together and explore shared interests.
                     </p>
