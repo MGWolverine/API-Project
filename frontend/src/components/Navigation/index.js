@@ -10,9 +10,9 @@ function Navigation({ isLoaded }){
 
   return (
     <div className='header'>
-      <button className='homeButton'>
-        <NavLink className='homeLink' exact to="/">Home</NavLink>
-      </button>
+      <div className='homeLogo'>
+        <NavLink className='homeLink' exact to="/">Not-Meetup</NavLink>
+      </div>
       {isLoaded && (
         <ul className='profileButton'>
           <ProfileButton user={sessionUser} />

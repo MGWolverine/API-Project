@@ -9,21 +9,11 @@
     margin-top: 20px;
 }
 
-.homeButton {
-    background-color: #008FA3;
-    font-size: 16px;
-    text-align: center;
-    cursor: pointer;
-    padding: 10px 20px;
-
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin: 10px;
-}
-
 .homeLink {
     text-decoration: none;
-    color: #D9EEF1;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif ;
+    font-size: x-large;
+    color: #F64060;
 }
 
 .profileButton {
