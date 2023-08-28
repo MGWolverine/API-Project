@@ -1,3 +1,6 @@
+import { csrfFetch } from "./csrf";
+
+
 //! Types
 const LOAD_EVENTS = 'events/LOAD_EVENTS';
 const RECEIVE_EVENT = 'events/RECEIVE_EVENT';
@@ -30,7 +33,7 @@ export const loadEvents = (events) => ({
 //* Get All Events
 
 export const retrieveAllEvents = () => async (dispatch) => {
-  const response = await fetch('/api/events', {
+  const response = await csrfFetch('/api/events', {
     method: "GET",
     headers: {"Content-Type": "application/json"},
   })
@@ -45,18 +48,39 @@ export const retrieveAllEvents = () => async (dispatch) => {
   }
 }
 
+//* Get details of an Event from an id
+
+export const retrieveSingleEvent = (eventId) => async (dispatch) => {
+  try {
+    const response = await csrfFetch(`/api/events/${eventId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      console.error("Error response from server:", response);
+      return;
+    }
+
+    const data = await response.json();
+    dispatch(receiveEvent(data));
+  } catch (error) {
+    console.error("Network error:", error);
+  }
+};
+
 //! Reducer
-const initialState = {allEvents: {}}
+const initialState = {allEvents: {}, singleEvent: {}}
 const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_EVENTS:
       const loadedEvents = {};
       action.events.allEvents.forEach(event => {
-        loadEvents[event.id] = event;
+        loadedEvents[event.id] = event;
       });
-      return {...state, allEvents: loadEvents};
+      return {...state, allEvents: loadedEvents};
     case RECEIVE_EVENT:
-      return [];
+      return {...state, singleEvent: {[action.event.id]: action.event}};
     case UPDATE_EVENT:
       return [];
     case REMOVE_EVENT:

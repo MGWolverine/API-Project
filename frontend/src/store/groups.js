@@ -53,7 +53,6 @@ export const retrieveAllGroups = () => async (dispatch) => {
 
 export const retrieveSingleGroup = (groupId) => async (dispatch) => {
   try {
-    console.log("LOOK AT MY ID" + groupId)
     const response = await csrfFetch(`/api/groups/${groupId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -74,7 +73,6 @@ export const retrieveSingleGroup = (groupId) => async (dispatch) => {
 //! Reducer
 const initialState = {allGroups: {}, singleGroup: {}};
 const groupsReducer = (state = initialState, action) => {
-  console.log('Reducer is executing:', action.type);
   switch (action.type) {
     case LOAD_GROUPS:
       const loadedGroups = {};
@@ -83,7 +81,6 @@ const groupsReducer = (state = initialState, action) => {
       });
       return {...state, allGroups: loadedGroups};
     case RECEIVE_GROUP:
-      console.log('RECEIVE_GROUP action data:', action.group);
       return {...state, singleGroup: {[action.group.id]: action.group}};
     case UPDATE_GROUP:
       return [];

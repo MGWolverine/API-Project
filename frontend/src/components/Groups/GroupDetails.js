@@ -7,11 +7,8 @@ const GroupDetails = () => {
     const { groupId } = useParams();
     const singleGroup = useSelector((state) => state.groups.singleGroup);
     const dispatch = useDispatch();
-    console.log(groupId);
-    console.log("singleGroup:", singleGroup);
 
     useEffect(() => {
-        console.log('Component mounted');
         dispatch(retrieveSingleGroup(groupId));
     }, [dispatch])
     return (
