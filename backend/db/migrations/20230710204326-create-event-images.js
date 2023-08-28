@@ -21,7 +21,7 @@ module.exports = {
         onDelete: 'cascade'
       },
       url: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       preview: {
         type: Sequelize.BOOLEAN
