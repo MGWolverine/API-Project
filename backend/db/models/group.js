@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       about: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
         validate: {
           notNull: { msg: 'About is required' },
