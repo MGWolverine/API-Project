@@ -115,7 +115,6 @@ router.get('/', validateQueryParameters , async (req, res) => {
       exclude: [
         'capacity',
         'price',
-        'description',
         'createdAt',
         'updatedAt'
       ]

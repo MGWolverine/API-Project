@@ -5,7 +5,7 @@ import { retrieveAllEvents } from "../../store/events";
 
 const EventsList = () => {
     const events = Object.values(
-        useSelector((state) => (state.events.allEvents ? state.events.allEvents : []))
+        useSelector((state) => (state.events.allEvents))
     );
     const dispatch = useDispatch();
 
@@ -26,8 +26,9 @@ const EventsList = () => {
                         <img src={event.previewImage}></img>
                         <h2>{event.name}</h2>
                         <p>{event.startDate}</p>
+                        <p>{event.Group.city}</p>
+                        <p>{event.Group.state}</p>
                         <p>{event.description}</p>
-                        <p>{event.state}</p>
                     </div>
                 ))}
             </div>
