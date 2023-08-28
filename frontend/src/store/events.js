@@ -70,7 +70,7 @@ export const retrieveSingleEvent = (eventId) => async (dispatch) => {
 };
 
 //! Reducer
-const initialState = {allEvents: {}, singleEvent: {}}
+const initialState = {allEvents: {}, singleEvent: {}};
 const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_EVENTS:
