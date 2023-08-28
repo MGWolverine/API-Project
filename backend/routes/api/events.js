@@ -145,67 +145,66 @@ router.get('/', validateQueryParameters , async (req, res) => {
 // Get details of an Event specified by its id*
 
 router.get('/:eventId', async (req, res) => {
-  const eventId = req.params.eventId
+  const eventId = req.params.eventId;
+
   const event = await Event.findByPk(eventId, {
-  include: [
-    {
-      model: Attendance,
-      as: 'Attendances',
-      where: {
-        status: 'attending'
+    include: [
+      {
+        model: Group,
+        attributes: [
+          'id',
+          'name',
+          'private',
+          'city',
+          'state'
+        ],
+      },
+      {
+        model: Venue,
+        attributes: [
+          'id',
+          'address',
+          'city',
+          'state',
+          'lat',
+          'lng'
+        ],
+      },
+      {
+        model: EventImage,
+        attributes: [
+          'id',
+          'url',
+          'preview'
+        ],
+      },
+      {
+        model: Attendance,
+        as: 'Attendances',
       }
-    },
-    {
-      model: Group,
-      attributes: [
-        'id',
-        'name',
-        'private',
-        'city',
-        'state'
-      ],
-    },
-    {
-      model: Venue,
-      attributes: [
-        'id',
-        'address',
-        'city',
-        'state',
-        'lat',
-        'lng'
-      ],
-    },
-    {
-      model: EventImage,
-      attributes: [
-        'id',
-        'url',
-        'preview'
-      ],
-    },
-  ],
-  attributes: {
-    exclude: [
-      'createdAt',
-      'updatedAt'
     ],
-  },
+    attributes: {
+      exclude: [
+        'createdAt',
+        'updatedAt'
+      ],
+    },
+  });
+
+  if (!event) {
+    return res.status(404).json({ message: "Event couldn't be found" });
+  }
+
+  const attendances = event.Attendances || [];
+
+  const attendingAttendances = attendances.filter(attendance => attendance.status === 'attending');
+
+  const response = event.toJSON();
+  response.numAttending = attendingAttendances;
+  delete response.Attendances
+
+  res.status(200).json(response);
 });
-
-if (!event) {
-  return res.status(404).json({ message: "Event couldn't be found" });
-}
-
-let response = event.toJSON()
-
-response.numAttending = response.Attendances.length;
-
-delete response.Attendances
-
-res.status(200).json(response);
-
-})
 
 
 // Edit an Event specified by its id
