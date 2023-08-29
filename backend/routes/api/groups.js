@@ -64,7 +64,7 @@ const router = express.Router();
 
 //Get all Groups*
 
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', async (req, res) => {
         const groups = await Group.findAll({
           include: [
             {

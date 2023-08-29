@@ -10,12 +10,13 @@ const GroupDetails = () => {
 
     useEffect(() => {
         dispatch(retrieveSingleGroup(groupId));
-    }, [dispatch])
+    }, [dispatch, singleGroup])
+    console.log("THIS IS THE SINGLE GROUP", singleGroup)
     return (
         <>
             <div className="group-details">
                 <h1>{singleGroup.name}</h1>
-                <p>{singleGroup.description}</p>
+                <p>{singleGroup.about}</p>
             </div>
         </>
     )
