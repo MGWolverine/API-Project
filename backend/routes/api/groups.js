@@ -64,7 +64,7 @@ const router = express.Router();
 
 //Get all Groups*
 
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', async (req, res) => {
         const groups = await Group.findAll({
           include: [
             {
@@ -182,7 +182,7 @@ router.get('/:groupId', async (req,res) => {
   groupData.numMembers = groupData.Memberships.length
   delete groupData.Memberships
 
-  res.status(200).json(groupData);
+  res.status(200).json({singleGroup: groupData});
 })
 
 //Creates and returns a new group.*

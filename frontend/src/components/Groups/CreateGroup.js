@@ -11,42 +11,74 @@ const CreateGroup = () => {
     const [vType, setVType] = useState("");
     const [image, setImage] = useState("");
     const [validationObject, setValidationObject] = useState({});
+    // const [formSubmitted, setFormSubmitted] = useState(false);
 
-    useEffect(() => {
-        const errorsObject = {};
+    // useEffect(() => {
+    //     if (!formSubmitted) {
+    //         const errorsObject = {};
 
-        if (!location) {
-            errorsObject.location = "Location is required";
-        }
-        if (!name) {
-            errorsObject.name = "Name is required";
-        }
-        if (description < 30) {
-            errorsObject.description = "Description must be at least 30 characters long";
-        }
-        if (!gType) {
-            errorsObject.gType = "Group Type is required";
-        }
-        if (!vType) {
-            errorsObject.vType = "Visibility Type is required";
-        }
-        if (!image) {
-            errorsObject.image = "Image URL must end in .png .jpg or .jpeg";
-        }
-        setValidationObject(errorsObject);
-    }, [location, name, description, gType, vType, image])
+    //         if (!location) {
+    //             errorsObject.location = "Location is required";
+    //         }
+    //         if (!name) {
+    //             errorsObject.name = "Name is required";
+    //         }
+    //         if (description.length < 30) {
+    //             errorsObject.description = "Description must be at least 30 characters long";
+    //         }
+    //         if (!gType) {
+    //             errorsObject.gType = "Group Type is required";
+    //         }
+    //         if (!vType) {
+    //             errorsObject.vType = "Visibility Type is required";
+    //         }
+    //         if (!image) {
+    //             errorsObject.image = "Image URL must end in .png .jpg or .jpeg";
+    //         }
+    //         setValidationObject(errorsObject);
+    //     }
+    // }, [location, name, description, gType, vType, image, formSubmitted])
+    const validateForm = () => {
+            const errorsObject = {};
+            if (!location) {
+                errorsObject.location = "Location is required";
+            }
+            if (!name) {
+                errorsObject.name = "Name is required";
+            }
+            if (description.length < 30) {
+                errorsObject.description = "Description must be at least 30 characters long";
+            }
+            if (!gType) {
+                errorsObject.gType = "Group Type is required";
+            }
+            if (!vType) {
+                errorsObject.vType = "Visibility Type is required";
+            }
+            if (!image) {
+                errorsObject.image = "Image URL must end in .png .jpg or .jpeg";
+            }
+            setValidationObject(errorsObject);
+    }
 
     function onSubmit(e) {
         e.preventDefault();
-        console.log({
-            location,
-            name,
-            description,
-            gType,
-            vType,
-            image
-        });
-        history.push("/");
+        validateForm();
+        if (Object.keys(validationObject).length === 0) {
+            console.log({
+                location,
+                name,
+                description,
+                gType,
+                vType,
+                image
+            });
+            return
+        }
+        if (!Object.keys(validationObject).length) (
+            // dont forget dispatch to send to thunk and add to db
+            history.push("/")
+        )
       }
 
     return (
@@ -59,12 +91,12 @@ const CreateGroup = () => {
                 in your area, and more can join you online.</p>
             <label>
                 <input
+                    id="location"
                     type="text"
                     name="location"
                     value={location}
                     placeholder="City, STATE"
                     onChange={(e) => setLocation(e.target.value)}
-                    required
                 />
             </label>
             {validationObject.location && <p className="errors">
@@ -75,6 +107,7 @@ const CreateGroup = () => {
                 Feel free to get creative! You can edit this later if you change your mind.</p>
             <label>
                 <input
+                    id="name"
                     type="text"
                     name="name"
                     value={name}
@@ -85,7 +118,7 @@ const CreateGroup = () => {
             {validationObject.name && <p className="errors">
                 {validationObject.name}</p>}
             <hr></hr>
-            <h2>Now describe what your group will be about</h2>
+            <h2>Now describe what your group will be about.</h2>
             <p>People will see this when we promote your group, but you'll be able to add to it later, too.</p>
             <ol type="1">
                 <li> What's the purpose of the group?</li>
@@ -101,14 +134,16 @@ const CreateGroup = () => {
             <hr></hr>
             <h2>Final Steps...</h2>
             <p>Is this an in person or online group?</p>
-            <select id="gtype" >
+            <select id="gtype" onChange={(e) => setGType(e.target.value)} value={gType}>
+                <option value="" disabled selected>(select one)</option>
                 <option value="person">In person</option>
                 <option value="online">Online</option>
             </select>
             {validationObject.gType && <p className="errors">
                 {validationObject.gType}</p>}
             <p>Is this group private or public?</p>
-            <select id="vtype" >
+            <select id="vtype" onChange={(e) => setVType(e.target.value)} value={vType} >
+                <option value="" disabled selected>(select one)</option>
                 <option value="private">Private</option>
                 <option value="public">Public</option>
             </select>
@@ -117,13 +152,14 @@ const CreateGroup = () => {
             <p>Please add in image url for your group below:</p>
             <label>
                 <input
+                id="image"
                 placeholder="image url"
                 />
             </label>
             {validationObject.image && <p className="errors">
                 {validationObject.image}</p>}
             <hr></hr>
-            <button className="button">Create Group</button>
+            <button className="button" type="submit">Create Group</button>
         </form>
     );
 }
