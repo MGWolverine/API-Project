@@ -182,7 +182,7 @@ router.get('/:groupId', async (req,res) => {
   groupData.numMembers = groupData.Memberships.length
   delete groupData.Memberships
 
-  res.status(200).json({singleGroup: groupData});
+  res.status(200).json(groupData);
 })
 
 //Creates and returns a new group.*

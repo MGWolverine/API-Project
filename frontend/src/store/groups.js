@@ -5,6 +5,7 @@ const LOAD_GROUPS = 'groups/LOAD_GROUPS';
 const RECEIVE_GROUP = 'groups/RECEIVE_GROUP';
 const UPDATE_GROUP = 'groups/UPDATE_GROUP';
 const REMOVE_GROUP = 'groups/REMOVE_GROUP';
+const CREATE_GROUP = 'groups/CREATE_GROUP';
 
 //! Actions
 export const loadGroups = (groups) => {
@@ -27,6 +28,11 @@ export const loadGroups = (groups) => {
   export const removeGroup = (groupId) => ({
     type: REMOVE_GROUP,
     groupId,
+  });
+
+  export const createGroup = (newGroup) => ({
+    type: CREATE_GROUP,
+    newGroup,
   });
 
 //! --------- Thunks -----------
@@ -70,6 +76,28 @@ export const retrieveSingleGroup = (groupId) => async (dispatch) => {
   }
 };
 
+//* Create new Group
+
+export const createNewGroup = (newGroup) => async (dispatch) => {
+  try {
+    const response = await csrfFetch('/api/groups/', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newGroup),
+    });
+
+    if (!response.ok) {
+      console.error("Error response from server:", response);
+      return;
+    }
+
+    const latestGroup = await response.json();
+    dispatch(createGroup(latestGroup));
+  } catch (error) {
+    console.error("Network error:", error);
+  }
+};
+
 //! Reducer
 const initialState = {allGroups: {}, singleGroup: {}};
 const groupsReducer = (state = initialState, action) => {
@@ -81,11 +109,13 @@ const groupsReducer = (state = initialState, action) => {
       });
       return {...state, allGroups: loadedGroups};
     case RECEIVE_GROUP:
-      return {...state, singleGroup: {[action.group.id]: action.group}};
+      return {...state, singleGroup: action.group};
+    case CREATE_GROUP:
+      return {...state, allGroups: {...state.allGroups, [action.group.id]: action.group}}
     case UPDATE_GROUP:
-      return [];
+      return state;
     case REMOVE_GROUP:
-      return [];
+      return state;
     default:
       return state;
   }
