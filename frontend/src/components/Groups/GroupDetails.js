@@ -5,20 +5,18 @@ import {retrieveSingleGroup} from "../../store/groups";
 
 const GroupDetails = () => {
     const { groupId } = useParams();
-    const singleGroup = Object.values(
-        useSelector((state) => (state.group.singleGroup ? state.group.singleGroup : []))
-    );
+    const singleGroup = useSelector((state) => state.groups.singleGroup);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(retrieveSingleGroup(groupId));
-    }, [dispatch])
+    }, [dispatch, singleGroup])
+    console.log("THIS IS THE SINGLE GROUP", singleGroup)
     return (
         <>
-            <h1>HELLO</h1>
             <div className="group-details">
-                <h1></h1>
-                <p></p>
+                <h1>{singleGroup.name}</h1>
+                <p>{singleGroup.about}</p>
             </div>
         </>
     )
