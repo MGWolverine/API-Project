@@ -8,14 +8,14 @@
     text-align: center;
   }
 
-  /* Styling for the title */
+
   .title {
     font-size: 24px;
     color: #333;
     margin-bottom: 10px;
   }
 
-  /* Styling for the link to events */
+
   .link {
     text-decoration: none;
     color: #007bff;
@@ -23,7 +23,6 @@
     display: block;
   }
 
-  /* Styling for each group item */
   .group-item {
     margin: 20px;
     padding: 20px;
@@ -32,9 +31,27 @@
     text-align: center;
   }
 
-  /* Styling for group image */
   .group-item img {
     max-width: 100%;
     height: auto;
     margin-bottom: 10px;
   }
+
+  .button {
+    background-color: #008FA3;
+    color: #D9EEF1;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px 20px;
+
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.errors {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
