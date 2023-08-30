@@ -19,20 +19,36 @@ const GroupsList = () => {
   }, [dispatch]);
   return (
     <div className="container">
-      <h1 className="title">
-        <p>Groups</p>
+      <div className="title">
+        <h1>Groups</h1>
         <Link className="eventslink" to="/events">
           Events
         </Link>
-      </h1>
+      </div>
       <div>
         {groups.map((group) => (
-          <div key={group.id} className="group-item" onClick={() => {history.push(`/groups/${group.id}`)}}>
-            <img src={group.previewImage} alt={group.name} />
-            <h2>{group.name}</h2>
-            <p>{group.city}</p>
-            <p>{group.state}</p>
-            <p>{group.about}</p>
+          <div
+            key={group.id}
+            className="group-item"
+            onClick={() => {
+              history.push(`/groups/${group.id}`);
+            }}
+          >
+            <div className="groupContainer">
+              <div className="groupImageDiv">
+                <img
+                  className="groupImage"
+                  src={group.previewImage}
+                  alt={group.name}
+                />
+              </div>
+              <div className="groupInfo">
+                <h2>{group.name}</h2>
+                <p className="groupsListp">{group.city}, {group.state}</p>
+                <p className="groupsListp">{group.about}</p>
+              </div>
+            </div>
+            <hr></hr>
           </div>
         ))}
       </div>
