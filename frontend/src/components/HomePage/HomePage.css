@@ -29,33 +29,71 @@
     display: flex;
     justify-content: center;
 }
+.subtitle1 {
+    font-size: 16px;
+    color: #666;
+    display: flex;
+    justify-content: center;
+    text-align: left;
+}
 
 .container2 {
     background-color: #FFFFFF;
     padding: 20px;
+    width: 400px;
+    margin-left: 180px;
+}
+
+.subtitle {
+    text-align: center;
 }
 
 .container3 {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     padding: 20px;
     background-color: #f0f0f0;
 }
 
-.container3 img {
-    max-width: 100%;
-    height: auto;
-    margin-right: 20px;
-}
-
-.link {
+.link-findevent {
     text-decoration: none;
     color: #00798A;
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
     display: inline-block;
+}
+
+.link-findevent:hover {
+    text-decoration: underline;
+}
+
+.link-seeAllGroups {
+    text-decoration: none;
+    color: #00798A;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.link-seeAllGroups:hover {
+    text-decoration: underline;
+}
+
+.link-startGroup {
+    text-decoration: none;
+    color: #00798A;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.link-startGroup:hover {
+    text-decoration: underline;
 }
 
 .joinButton {
@@ -69,4 +107,24 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     margin: 10px;
+}
+
+.image1 {
+    height: auto;
+    width: 50%;
+}
+
+.image2 {
+    width: 80%;
+    height: 115px;
+}
+
+.navbox {
+    width: 20%;
+    padding: 15px;
+    height: 220px;
+}
+
+p {
+    text-align: center;
 }

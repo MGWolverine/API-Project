@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { createNewGroup } from "../../store/groups";
 import "./GroupsList.css";
 
-const CreateGroup = ({ newGroup }) => {
+const CreateGroup = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [location, setLocation] = useState("");
@@ -92,8 +92,7 @@ const CreateGroup = ({ newGroup }) => {
     e.preventDefault();
     validateForm();
     if (!Object.keys(validationObject).length) {
-      newGroup = {
-        ...newGroup,
+     const newGroup = {
         location,
         name,
         description,
@@ -102,7 +101,7 @@ const CreateGroup = ({ newGroup }) => {
         image,
       };
       dispatch(createNewGroup(newGroup));
-      history.push(`/groups/`);
+      history.push(`/groups/${newGroup.id}`);
     }
   }
 
@@ -179,8 +178,8 @@ const CreateGroup = ({ newGroup }) => {
         <option value="" disabled selected>
           (select one)
         </option>
-        <option value="person">In person</option>
-        <option value="online">Online</option>
+        <option value="In Person">In person</option>
+        <option value="Online">Online</option>
       </select>
       {validationObject.gType && (
         <p className="errors">{validationObject.gType}</p>
@@ -194,8 +193,8 @@ const CreateGroup = ({ newGroup }) => {
         <option value="" disabled selected>
           (select one)
         </option>
-        <option value="private">Private</option>
-        <option value="public">Public</option>
+        <option value={true}>Private</option>
+        <option value={false}>Public</option>
       </select>
       {validationObject.vType && (
         <p className="errors">{validationObject.vType}</p>
