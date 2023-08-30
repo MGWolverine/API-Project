@@ -6,11 +6,19 @@ const RECEIVE_GROUP = "groups/RECEIVE_GROUP";
 const UPDATE_GROUP = "groups/UPDATE_GROUP";
 const REMOVE_GROUP = "groups/REMOVE_GROUP";
 const CREATE_GROUP = "groups/CREATE_GROUP";
+const LOAD_ORGANIZER = "groups/CREATE_GROUP";
 
 //! Actions
 export const loadGroups = (groups) => {
   return {
     type: LOAD_GROUPS,
+    groups,
+  };
+};
+
+export const loadOrganizer = (groups) => {
+  return {
+    type: LOAD_ORGANIZER,
     groups,
   };
 };
@@ -126,6 +134,7 @@ export const deleteGroup = (groupId) => async (dispatch) => {
 
   dispatch(removeGroup(groupId));
 };
+
 
 //! Reducer
 const initialState = { allGroups: {}, singleGroup: {GroupImages: [0]} };
