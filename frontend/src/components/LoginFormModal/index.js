@@ -28,8 +28,8 @@ function LoginFormModal() {
   return (
     <>
       <h1 className="logInTitle">Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+      <form className="signupForm" onSubmit={handleSubmit}>
+        <label className="signupLabel">
           Username or Email
           <input
             type="text"
@@ -38,7 +38,7 @@ function LoginFormModal() {
             required
           />
         </label>
-        <label>
+        <label className="signupLabel">
           Password
           <input
             type="password"
