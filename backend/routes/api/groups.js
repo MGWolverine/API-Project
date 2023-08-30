@@ -16,8 +16,8 @@ const validateGroups = [
       .withMessage('Name must be 60 characters or less'),
     check('about')
       .exists({ checkFalsy: true })
-      .isLength({ min: 50 })
-      .withMessage('About must be 50 characters or more'),
+      .isLength({ min: 30 })
+      .withMessage('About must be 30 characters or more'),
     check('type')
       .isIn(['Online', 'In person'])
       .withMessage("Type must be 'Online' or 'In person'"),
@@ -29,10 +29,10 @@ const validateGroups = [
        .exists({ checkFalsy: true })
        .isLength({ min: 1 })
        .withMessage('City is required'),
-    check('state')
-       .exists({ checkFalsy: true })
-       .isLength({ min: 1 })
-       .withMessage('State is required'),
+    // check('state')
+    //    .exists({ checkFalsy: true })
+    //    .isLength({ min: 1 })
+    //    .withMessage('State is required'),
     handleValidationErrors
   ];
 

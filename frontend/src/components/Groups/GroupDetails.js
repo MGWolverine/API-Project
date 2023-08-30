@@ -1,25 +1,53 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {retrieveSingleGroup} from "../../store/groups";
+import { Link } from "react-router-dom";
+import { retrieveSingleGroup } from "../../store/groups";
 
 const GroupDetails = () => {
-    const { groupId } = useParams();
-    const singleGroup = useSelector((state) => state.groups.singleGroup);
-    const dispatch = useDispatch();
+  const { groupId } = useParams();
+  const singleGroup = useSelector((state) => state.groups.singleGroup);
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(retrieveSingleGroup(groupId));
-    }, [dispatch, singleGroup])
-    console.log("THIS IS THE SINGLE GROUP", singleGroup)
-    return (
-        <>
-            <div className="group-details">
-                <h1>{singleGroup.name}</h1>
-                <p>{singleGroup.about}</p>
-            </div>
-        </>
-    )
-}
 
-export default GroupDetails
+  useEffect(() => {
+    dispatch(retrieveSingleGroup(groupId));
+  }, [dispatch, groupId]);
+
+  if (!singleGroup) {
+    return null;
+  }
+  return (
+    <>
+      <Link className="groupsLink" to="/groups">
+        &lt; Groups
+      </Link>
+      <div className="group-details">
+        <img src={singleGroup.GroupImages[0].url}/>
+        <h2>{singleGroup.name}</h2>
+        <p>{singleGroup.city}</p>
+        <p>
+          {/* Organized by {singleGroup.Organizer.firstName}{" "}
+          {singleGroup.Organizer.lastName} */}
+        </p>
+        <button>Join this group</button>
+      </div>
+      <div>
+        <div>
+          <h2>Organizer</h2>
+          <p>
+            {/* {singleGroup.Organizer.firstName} {singleGroup.Organizer.lastName} */}
+          </p>
+          <h2>What we're about</h2>
+          <p>{singleGroup.about}</p>
+        </div>
+        <div>
+            <h2>Upcoming Events (#)</h2>
+
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default GroupDetails;
