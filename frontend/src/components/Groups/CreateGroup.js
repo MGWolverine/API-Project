@@ -62,7 +62,6 @@ const CreateGroup = () => {
       }
 
       const response = await dispatch(createNewGroup(newGroup, newImage));
-      console.log("THIS IS THE RESPONSE", response)
       history.push(`/groups/${response.id}`);
     }
   }

@@ -45,6 +45,7 @@ function ProfileButton({ user }) {
 
   return (
     <>
+    <div className="prof-link">
       {sessionUser ? (
         <Link className="link startGroup" to="/groups/new">
           Start a new group
@@ -82,6 +83,7 @@ function ProfileButton({ user }) {
           </>
         )}
       </ul>
+      </div>
     </>
   );
 }
