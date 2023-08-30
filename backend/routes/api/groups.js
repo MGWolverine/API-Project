@@ -29,10 +29,10 @@ const validateGroups = [
        .exists({ checkFalsy: true })
        .isLength({ min: 1 })
        .withMessage('City is required'),
-    // check('state')
-    //    .exists({ checkFalsy: true })
-    //    .isLength({ min: 1 })
-    //    .withMessage('State is required'),
+    check('state')
+       .exists({ checkFalsy: true })
+       .isLength({ min: 1 })
+       .withMessage('State is required'),
     handleValidationErrors
   ];
 

@@ -23,12 +23,13 @@ const GroupDetails = () => {
         &lt; Groups
       </Link>
       <div className="group-details">
-        <img src={singleGroup.GroupImages[0].url}/>
+        <img className="groupDetailsImage" src={singleGroup.GroupImages[0].url}/>
         <h2>{singleGroup.name}</h2>
         <p>{singleGroup.city}</p>
+        <p>{singleGroup.state}</p>
         <p>
-          {/* Organized by {singleGroup.Organizer.firstName}{" "}
-          {singleGroup.Organizer.lastName} */}
+          Organized by {singleGroup.Organizer.firstName}{" "}
+          {singleGroup.Organizer.lastName}
         </p>
         <button>Join this group</button>
       </div>
@@ -36,14 +37,13 @@ const GroupDetails = () => {
         <div>
           <h2>Organizer</h2>
           <p>
-            {/* {singleGroup.Organizer.firstName} {singleGroup.Organizer.lastName} */}
+            {singleGroup.Organizer.firstName} {singleGroup.Organizer.lastName}
           </p>
           <h2>What we're about</h2>
           <p>{singleGroup.about}</p>
         </div>
         <div>
             <h2>Upcoming Events (#)</h2>
-
         </div>
       </div>
     </>

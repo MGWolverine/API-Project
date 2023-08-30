@@ -7,43 +7,22 @@ import "./GroupsList.css";
 const CreateGroup = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [location, setLocation] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [gType, setGType] = useState("");
   const [vType, setVType] = useState("");
   const [image, setImage] = useState("");
   const [validationObject, setValidationObject] = useState({});
-  // const [formSubmitted, setFormSubmitted] = useState(false);
-  // useEffect(() => {
-  //     if (!formSubmitted) {
-  //         const errorsObject = {};
 
-  //         if (!location) {
-  //             errorsObject.location = "Location is required";
-  //         }
-  //         if (!name) {
-  //             errorsObject.name = "Name is required";
-  //         }
-  //         if (description.length < 30) {
-  //             errorsObject.description = "Description must be at least 30 characters long";
-  //         }
-  //         if (!gType) {
-  //             errorsObject.gType = "Group Type is required";
-  //         }
-  //         if (!vType) {
-  //             errorsObject.vType = "Visibility Type is required";
-  //         }
-  //         if (!image) {
-  //             errorsObject.image = "Image URL must end in .png .jpg or .jpeg";
-  //         }
-  //         setValidationObject(errorsObject);
-  //     }
-  // }, [location, name, description, gType, vType, image, formSubmitted])
   const validateForm = () => {
     const errorsObject = {};
-    if (!location) {
-      errorsObject.location = "Location is required";
+    if (!city) {
+      errorsObject.city = "City is required";
+    }
+    if (!state) {
+      errorsObject.state = "State is required";
     }
     if (!name) {
       errorsObject.name = "Name is required";
@@ -64,44 +43,27 @@ const CreateGroup = () => {
     setValidationObject(errorsObject);
   };
 
-  //   async function onSubmit(e) {
-  //     e.preventDefault();
-  //     validateForm();
-  //     if (!Object.keys(validationObject).length) {
-  //       console.log({
-  //         location,
-  //         name,
-  //         description,
-  //         gType,
-  //         vType,
-  //         image,
-  //       });
-  //       return;
-  //     }
-  //     if (!Object.keys(validationObject).length)
-  //       dispatchEvent(createNewGroup(newGroup))
-  //         .then((createdGroup) => {
-  //           history.push(`/groups/${createdGroup.id}`);
-  //         })
-  //         .catch((error) => {
-  //           console.error("Error creating the group:", error);
-  //         });
-  //         return
-  //   }
-  async function onSubmit(e) {
+  const onSubmit = async (e) => {
     e.preventDefault();
     validateForm();
     if (!Object.keys(validationObject).length) {
      const newGroup = {
-        location,
+        city,
+        state,
         name,
-        description,
-        gType,
-        vType,
-        image,
+        about: description,
+        type: gType,
+        private: vType,
       };
-      dispatch(createNewGroup(newGroup));
-      history.push(`/groups/${newGroup.id}`);
+
+      const newImage = {
+        url: image,
+        preview: true,
+      }
+
+      const response = await dispatch(createNewGroup(newGroup, newImage));
+      console.log("THIS IS THE RESPONSE", response)
+      history.push(`/groups/${response.id}`);
     }
   }
 
@@ -115,18 +77,31 @@ const CreateGroup = () => {
         Meetup groups meet locally, in person and online. We'll connect you with
         people in your area, and more can join you online.
       </p>
-      <label>
+      <label className="locationLabel">
         <input
-          id="location"
+          id="city"
           type="text"
-          name="location"
-          value={location}
-          placeholder="City, STATE"
-          onChange={(e) => setLocation(e.target.value)}
+          name="city"
+          value={city}
+          placeholder="City"
+          onChange={(e) => setCity(e.target.value)}
         />
       </label>
-      {validationObject.location && (
-        <p className="errors">{validationObject.location}</p>
+      {validationObject.city && (
+        <p className="errors">{validationObject.city}</p>
+      )}
+      <label className="locationLabel">
+        <input
+          id="state"
+          type="text"
+          name="state"
+          value={state}
+          placeholder="State"
+          onChange={(e) => setState(e.target.value)}
+        />
+      </label>
+      {validationObject.state && (
+        <p className="errors">{validationObject.state}</p>
       )}
       <hr></hr>
       <h2>What will your group's name be?</h2>
@@ -178,7 +153,7 @@ const CreateGroup = () => {
         <option value="" disabled selected>
           (select one)
         </option>
-        <option value="In Person">In person</option>
+        <option value="In person">In person</option>
         <option value="Online">Online</option>
       </select>
       {validationObject.gType && (

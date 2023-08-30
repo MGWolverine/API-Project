@@ -30,9 +30,10 @@ export const removeGroup = (groupId) => ({
   groupId,
 });
 
-export const createGroup = (newGroup) => ({
+export const createGroup = (newGroup, groupId) => ({
   type: CREATE_GROUP,
   newGroup,
+  groupId,
 });
 
 //! --------- Thunks -----------
@@ -78,7 +79,7 @@ export const retrieveSingleGroup = (groupId) => async (dispatch) => {
 
 //* Create new Group
 
-export const createNewGroup = (newGroup) => async (dispatch) => {
+export const createNewGroup = (newGroup, newImage) => async (dispatch) => {
   try {
     const response = await csrfFetch("/api/groups/", {
       method: "POST",
@@ -92,8 +93,20 @@ export const createNewGroup = (newGroup) => async (dispatch) => {
     }
 
     const latestGroup = await response.json();
-    dispatch(createGroup(latestGroup));
-    dispatch(retrieveSingleGroup(latestGroup.id));
+
+    const response2 = await csrfFetch(`/api/groups/${latestGroup.id}/images`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newImage)
+  })
+
+  if (!response2.ok) {
+    console.error("Error response from server:", response);
+    return;
+  }
+
+  return latestGroup;
+
   } catch (error) {
     console.error("Network error:", error);
   }
@@ -129,7 +142,7 @@ const groupsReducer = (state = initialState, action) => {
     case CREATE_GROUP:
       return {
         ...state,
-        allGroups: { ...state.allGroups, [action.group.id]: action.group },
+        allGroups: { ...state.allGroups, [action.group.id]: action.group }, //allGroups: { ...state.allGroups, [action.group.id]: action.group },
       };
     case UPDATE_GROUP:
       return state;
