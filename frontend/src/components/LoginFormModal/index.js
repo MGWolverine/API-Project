@@ -28,19 +28,21 @@ function LoginFormModal() {
   return (
     <>
       <h1 className="logInTitle">Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+      <form className="signupForm" onSubmit={handleSubmit}>
+        <label className="signupLabel">
           Username or Email
           <input
+            className="inputModal"
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
           />
         </label>
-        <label>
+        <label className="signupLabel">
           Password
           <input
+            className="inputModal"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

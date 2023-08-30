@@ -23,7 +23,7 @@ const HomePage = () => {
         </section>
         <section className="container2">
           <h2 className="title">How Not-Meetup works</h2>
-          <p className="subtitle">
+          <p className="subtitle2">
             Meet new people who share your interests through online and in
             person events. It’s free to create an account.
           </p>
@@ -35,7 +35,7 @@ const HomePage = () => {
               <Link className="link-seeAllGroups" to="/groups">
                 See all groups
               </Link>
-              <p className="subtitle">
+              <p className="subtitle2">
                 Do what you love, meet others who love it, find your community.
                 The rest is history!
               </p>
@@ -46,7 +46,7 @@ const HomePage = () => {
             <Link className="link-findevent" to="/events">
               Find an event
             </Link>
-            <p className="subtitle">
+            <p className="subtitle2">
               Events are happening on just about any topic you can think of,
               from online gaming and photography to yoga and hiking.
             </p>
@@ -62,7 +62,7 @@ const HomePage = () => {
                 Start a new group
               </p>
             )}
-            <p className="subtitle">
+            <p className="subtitle2">
               You don’t have to be an expert to gather people together and
               explore shared interests.
             </p>

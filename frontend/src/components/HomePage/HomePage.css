@@ -44,10 +44,6 @@
     margin-left: 180px;
 }
 
-.subtitle {
-    text-align: center;
-}
-
 .container3 {
     display: flex;
     flex-wrap: wrap;
@@ -64,6 +60,7 @@
     font-weight: bold;
     margin-bottom: 10px;
     display: inline-block;
+    margin-left: 15px;
 }
 
 .link-findevent:hover {
@@ -77,6 +74,7 @@
     font-weight: bold;
     margin-bottom: 10px;
     display: inline-block;
+    margin-left: 15px;
 }
 
 .link-seeAllGroups:hover {
@@ -90,6 +88,7 @@
     font-weight: bold;
     margin-bottom: 10px;
     display: inline-block;
+    margin-left: 10px;
 }
 
 .link-startGroup:hover {
@@ -125,6 +124,6 @@
     height: 220px;
 }
 
-p {
+.subtitle2 {
     text-align: center;
 }

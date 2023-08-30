@@ -73,7 +73,7 @@
 .groupImageDiv {
   float: left;
   width: 30%;
-  height: 150px;
+  height: 20%;
 }
 
 .groupInfo {
@@ -85,4 +85,12 @@
 
 .groupsListp {
   text-align: left;
+}
+
+.locationLabel {
+  padding: 2px;
+}
+
+.groupDetailsImage {
+  width: 200px;
 }
