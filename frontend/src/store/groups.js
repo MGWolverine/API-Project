@@ -121,8 +121,8 @@ export const createNewGroup = (newGroup, newImage) => async (dispatch) => {
 
 //* Update a Group
 
-const EditGroup = (group) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${group.id}/edit`, {
+export const updateGroup = (group, groupId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(group),

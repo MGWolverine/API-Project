@@ -21,7 +21,7 @@ const GroupsList = () => {
     <div className="container">
       <div className="titleGroupsList">
         <div className="titleLink">
-          <Link className='groupsDetailsGroupsLink'>Groups</Link>
+          <Link className='groupsDetailsGroupsLink' to="/groups">Groups</Link>
         </div>
         <div className="titleLink">
           <Link className="eventslink" to="/events">

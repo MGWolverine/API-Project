@@ -41,6 +41,9 @@ const GroupDetails = () => {
         </p>
         <button>Join this group</button>
         {singleGroup.organizerId === sessionUser.id && (
+          <Link to={`/${singleGroup.id}/edit`}>Manage Group</Link>
+        )}
+        {singleGroup.organizerId === sessionUser.id && (
           <OpenModalMenuItem
             buttonText="Delete"
             modalComponent={<DeleteGroup groupId={singleGroup.id} />}

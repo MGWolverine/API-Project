@@ -20,7 +20,7 @@ const EventsList = () => {
           </Link>
         </div>
         <div className="titleLink">
-          <Link>Events</Link>
+          <Link to='/events'>Events</Link>
         </div>
       </div>
       <div>
