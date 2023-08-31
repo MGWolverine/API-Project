@@ -19,11 +19,15 @@ const GroupsList = () => {
   }, [dispatch]);
   return (
     <div className="container">
-      <div className="title">
-        <h1>Groups</h1>
-        <Link className="eventslink" to="/events">
-          Events
-        </Link>
+      <div className="titleGroupsList">
+        <div className="titleLink">
+          <Link className='groupsDetailsGroupsLink'>Groups</Link>
+        </div>
+        <div className="titleLink">
+          <Link className="eventslink" to="/events">
+            Events
+          </Link>
+        </div>
       </div>
       <div>
         {groups.map((group) => (
@@ -44,7 +48,9 @@ const GroupsList = () => {
               </div>
               <div className="groupInfo">
                 <h2>{group.name}</h2>
-                <p className="groupsListp">{group.city}, {group.state}</p>
+                <p className="groupsListp">
+                  {group.city}, {group.state}
+                </p>
                 <p className="groupsListp">{group.about}</p>
               </div>
             </div>

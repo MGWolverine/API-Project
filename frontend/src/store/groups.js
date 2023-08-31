@@ -105,19 +105,37 @@ export const createNewGroup = (newGroup, newImage) => async (dispatch) => {
     const response2 = await csrfFetch(`/api/groups/${latestGroup.id}/images`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newImage)
-  })
+      body: JSON.stringify(newImage),
+    });
 
-  if (!response2.ok) {
+    if (!response2.ok) {
+      console.error("Error response from server:", response);
+      return;
+    }
+
+    return latestGroup;
+  } catch (error) {
+    console.error("Network error:", error);
+  }
+};
+
+//* Update a Group
+
+const EditGroup = (group) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${group.id}/edit`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(group),
+  });
+
+  if (!response.ok) {
     console.error("Error response from server:", response);
     return;
   }
 
-  return latestGroup;
-
-  } catch (error) {
-    console.error("Network error:", error);
-  }
+  const group = await response.json();
+  await dispatch(editGroup(group));
+  return group;
 };
 
 //* Delete Group
@@ -135,9 +153,8 @@ export const deleteGroup = (groupId) => async (dispatch) => {
   dispatch(removeGroup(groupId));
 };
 
-
 //! Reducer
-const initialState = { allGroups: {}, singleGroup: {GroupImages: [0]} };
+const initialState = { allGroups: {}, singleGroup: { GroupImages: [0] } };
 const groupsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_GROUPS:
@@ -151,10 +168,10 @@ const groupsReducer = (state = initialState, action) => {
     case CREATE_GROUP:
       return {
         ...state,
-        allGroups: { ...state.allGroups, [action.group.id]: action.group }, //allGroups: { ...state.allGroups, [action.group.id]: action.group },
+        allGroups: { ...state.allGroups, [action.group.id]: action.group },
       };
     case UPDATE_GROUP:
-      return state;
+      return { ...state, singleGroup: { [action.group.id]: action.group } };
     case REMOVE_GROUP:
       const { [action.groupId]: removeGroup, ...updatedGroups } =
         state.allGroups;

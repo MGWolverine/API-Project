@@ -9,10 +9,12 @@
   }
 
 
-  .title {
+  .titleGroupsList {
+    display: flex;
     font-size: 24px;
     color: #333;
     margin-bottom: 10px;
+    width: 100%;
   }
 
 
@@ -93,4 +95,14 @@
 
 .groupDetailsImage {
   width: 200px;
+}
+
+.titleLink {
+  float: left;
+  padding-left: 10px;
+}
+
+.groupsDetailsGroupsLink {
+  text-decoration: none;
+  pointer-events: none;
 }
