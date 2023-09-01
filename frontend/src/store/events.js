@@ -117,24 +117,24 @@ export const createNewEvent = (newEvent, newImage) => async (dispatch) => {
   }
 };
 
-//* Update a Event
+// //* Update a Event
 
-export const updateEvent = (event, eventId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/events/${eventId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(event),
-  });
+// export const updateEvent = (event, eventId) => async (dispatch) => {
+//   const response = await csrfFetch(`/api/events/${eventId}`, {
+//     method: "PUT",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(event),
+//   });
 
-  if (!response.ok) {
-    console.error("Error response from server:", response);
-    return;
-  }
+//   if (!response.ok) {
+//     console.error("Error response from server:", response);
+//     return;
+//   }
 
-  const editedEvent = await response.json();
-  await dispatch(editEvent(editedEvent));
-  return editedEvent;
-};
+//   const editedEvent = await response.json();
+//   await dispatch(editEvent(editedEvent));
+//   return editedEvent;
+// };
 
 //* Delete Event
 

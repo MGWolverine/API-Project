@@ -14,7 +14,7 @@ const EventDetails = () => {
     state.session.user ? state.session.user : 1
   );
 
-  console.log("SINGLE EVENT ----->", singleEvent)
+  console.log("SINGLE EVENT ----->", singleEvent);
 
   useEffect(() => {
     dispatch(retrieveSingleEvent(eventId));
@@ -41,7 +41,9 @@ const EventDetails = () => {
           {/* Organized by {singleEvent.Organizer.firstName}{" "}
           {singleEvent.Organizer.lastName} */}
         </p>
-        <button>Join this Event</button>
+        <button onClick={() => alert("Feature coming soon...")}>
+          Join this Event
+        </button>
         {singleEvent.organizerId === sessionUser.id && (
           <Link to={`/${singleEvent.id}/edit`}>Manage Event</Link>
         )}
