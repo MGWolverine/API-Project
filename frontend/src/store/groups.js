@@ -133,9 +133,9 @@ export const updateGroup = (group, groupId) => async (dispatch) => {
     return;
   }
 
-  const group = await response.json();
-  await dispatch(editGroup(group));
-  return group;
+  const editedgroup = await response.json();
+  await dispatch(editGroup(editedgroup));
+  return editedgroup;
 };
 
 //* Delete Group

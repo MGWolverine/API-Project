@@ -10,7 +10,10 @@ import EventsList from "./components/Events/EventsList";
 import GroupDetails from "./components/Groups/GroupDetails";
 import EventDetails from "./components/Events/EventDetails";
 import CreateGroup from "./components/Groups/CreateGroup";
+import CreateEvent from "./components/Events/CreateEvent";
 import UpdateGroup from "./components/Groups/UpdateGroup";
+import UpdateEvent from "./components/Events/UpdateEvent"
+
 
 
 function App() {
@@ -27,9 +30,11 @@ function App() {
       <Switch>
         <Route exact path='/' component={HomePage} />
         <Route exact path='/groups/new' component={CreateGroup} />
+        <Route exact path='/events/new' component={CreateEvent} />
         <Route exact path='/groups' component={GroupsList} />
         <Route exact path='/events' component={EventsList} />
         <Route path='/:groupId/edit' component={UpdateGroup} />
+        <Route path='/:eventId/edit' component={UpdateEvent} />
         <Route path='/groups/:groupId' component={GroupDetails} />
         <Route path='/events/:eventId' component={EventDetails} />
       </Switch>)}

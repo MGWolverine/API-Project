@@ -18,14 +18,24 @@ const UpdateGroup = () => {
   // const [image, setImage] = useState("");
   const [validationObject, setValidationObject] = useState({});
 
-  const {groupId} = useParams();
+  const { groupId } = useParams();
 
- const groupUpdate = useSelector((state) => state.groups.singleGroup)
- console.log("GROUP UPDATE", groupUpdate)
+  const groupUpdate = useSelector((state) => state.groups.singleGroup);
 
- useEffect(() => {
-  dispatch(retrieveSingleGroup(groupId))
- }, [dispatch, groupId])
+  useEffect(() => {
+    if (groupUpdate) {
+      setCity(groupUpdate.city || "");
+      setState(groupUpdate.state || "");
+      setName(groupUpdate.name || "");
+      setDescription(groupUpdate.about || "");
+      setGType(groupUpdate.type || "");
+      setVType(groupUpdate.private || "");
+    }
+  }, [groupUpdate]);
+
+  useEffect(() => {
+    dispatch(retrieveSingleGroup(groupId));
+  }, [dispatch, groupId]);
 
   const validateForm = () => {
     const errorsObject = {};
@@ -58,7 +68,7 @@ const UpdateGroup = () => {
     e.preventDefault();
     validateForm();
     if (!Object.keys(validationObject).length) {
-     const newGroup = {
+      const newGroup = {
         city,
         state,
         name,
@@ -73,14 +83,28 @@ const UpdateGroup = () => {
       // }
 
       const response = await dispatch(updateGroup(newGroup, groupId));
-      history.push(`/groups/${response.id}`);
+      console.log("RESPONSE", response)
+      if(response.id) {
+
+        const updatedGroup = await dispatch(retrieveSingleGroup(response.id))
+        console.log("UPDATEDGROUP", updatedGroup)
+
+          history.push(`/groups/${groupId}`);
+
+      } else {
+        return null;
+      }
+
     }
-  }
+  };
+
 
   return (
     <form className="group-form" onSubmit={onSubmit}>
-      <h3>BECOME AN ORGANIZER</h3>
-      <h2>We'll walk you through a few steps to build your local community</h2>
+      <h3>UPDATE YOUR GROUP'S INFORMATION</h3>
+      <h2>
+        We'll walk you through a few steps to update your group's information
+      </h2>
       <hr></hr>
       <h2>First, set your group's location.</h2>
       <p>
@@ -145,6 +169,7 @@ const UpdateGroup = () => {
         <li>What will you do at your events?</li>
       </ol>
       <textarea
+        defaultValue={groupUpdate.about}
         placeholder="Please write at least 30 characters"
         style={{ width: "300px", height: "150px" }}
         onChange={(e) => setDescription(e.target.value)}
@@ -198,7 +223,7 @@ const UpdateGroup = () => {
       )} */}
       <hr></hr>
       <button className="button" type="submit">
-        Edit Group
+        Update group
       </button>
     </form>
   );

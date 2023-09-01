@@ -1,24 +1,24 @@
-import { deleteGroup } from "../../store/groups";
+import { deleteEvent } from "../../store/events";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useHistory } from "react-router-dom";
 
-const DeleteGroup = ({ groupId }) => {
+const DeleteEvent = ({ eventId }) => {
   const dispatch = useDispatch();
   const {closeModal} = useModal();
   const history = useHistory();
 
   const remove = () => {
-    dispatch(deleteGroup(groupId));
+    dispatch(deleteEvent(eventId));
     closeModal();
-    history.replace('/groups');
+    history.replace('/events');
   };
 
   return (
     <>
-      <button onClick={remove}>Delete Group</button>
+      <button onClick={remove}>Delete Event</button>
     </>
   );
 };
 
-export default DeleteGroup;
+export default DeleteEvent;
