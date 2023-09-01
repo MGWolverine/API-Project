@@ -1,39 +1,73 @@
 .profile-dropdown.hidden {
-    display: none;
+  display: none;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 80px;
+  right: 90px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.profile-dropdown li {
+  margin: 5px 0;
+  list-style: none;
+}
+
+.link.startGroup {
+  margin-top: 3px;
+  text-decoration: underline;
+  color: #008fa3; /* Adjust link color */
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    margin-top: 20px;
-    border-bottom: 2px solid #000000;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  border-bottom: 2px solid #000000;
 }
 
 .homeLink {
-    text-decoration: none;
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif ;
-    font-size: x-large;
-    color: #F64060;
+  text-decoration: none;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: x-large;
+  color: #f64060;
 }
 
 .homeLogo {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .profile-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding-left: 10px;
-  }
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-left: 10px;
+}
 
- .profile-button i {
-    font-size: 24px;
-    color: #008FA3;
+.profile-button i {
+  font-size: 24px;
+  color: #008fa3;
 }
 
 .prof-link {
-    display: flex;
+  display: flex;
+}
+
+.modal-logout-button {
+    background-color: #008FA3;
+    color: #D9EEF1;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    padding: 3px 7px;
+
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px;
 }
