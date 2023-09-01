@@ -29,6 +29,7 @@ const GroupsList = () => {
           </Link>
         </div>
       </div>
+        <p className="groupsListMiniTitle">Groups in Not-Meetup</p>
       <div>
         {groups.map((group) => (
           <div

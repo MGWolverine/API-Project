@@ -25,6 +25,8 @@ function LoginFormModal() {
       });
   };
 
+  const disabledLogin = () => password.length < 6 || credential.length < 4;
+
   return (
     <>
       <h1 className="logInTitle">Log In</h1>
@@ -52,7 +54,7 @@ function LoginFormModal() {
         {errors.credential && (
           <p>{errors.credential}</p>
         )}
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={disabledLogin()} >Log In</button>
       </form>
     </>
   );

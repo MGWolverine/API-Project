@@ -133,16 +133,43 @@ const CreateEvent = () => {
       </label>
       <hr></hr>
       <p>When does your event start?</p>
-      <input></input>
+      <input
+        id="startDate"
+        type="date"
+        name="startDate"
+        onChange={(e) => setStartDate(e.target.value)}
+      ></input>
       <p>When does your event end?</p>
-      <input></input>
+      <input
+        id="endDate"
+        type="date"
+        name="endDate"
+        onChange={(e) => setStartDate(e.target.value)}
+      ></input>
       <hr></hr>
       <p>Please add in image url for your event below:</p>
-      <input></input>
+      <label>
+        <input
+          id="image"
+          placeholder="image url"
+          type="url"
+          onChange={(e) => setImage(e.target.value)}
+        ></input>
+      </label>
+      {validationObject.image && (
+        <p className="errors">{validationObject.image}</p>
+      )}
       <hr></hr>
       <p>Please describe your event:</p>
-      <textarea></textarea>
-      <button>Create Event</button>
+      <textarea
+        placeholder="Please write at least 30 characters"
+        style={{ width: "300px", height: "150px" }}
+        onChange={(e) => setDescription(e.target.value)}
+      ></textarea>
+      <hr></hr>
+      <button className="button" type="submit">
+        Create Event
+      </button>
     </form>
   );
 };
