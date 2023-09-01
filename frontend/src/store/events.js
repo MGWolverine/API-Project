@@ -152,7 +152,7 @@ export const deleteEvent = (eventId) => async (dispatch) => {
 };
 
 //! Reducer
-const initialState = { allEvents: {}, singleEvent: { EventImages: [0] } };
+const initialState = { allEvents: {}, singleEvent: {} };
 const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_EVENTS:
@@ -162,14 +162,14 @@ const eventsReducer = (state = initialState, action) => {
       });
       return { ...state, allEvents: loadedEvents };
     case RECEIVE_EVENT:
-      return { ...state, singleEvent: { [action.event.id]: action.event } };
+      return { ...state, singleEvent: {...action.event} };
       case CREATE_EVENT:
         return {
           ...state,
-          allEvents: { ...state.allEvents, [action.event.id]: action.event },
+          allEvents: { ...state.allEvents, ...action.event },
         };
       case UPDATE_EVENT:
-        return { ...state, singleEvent: { [action.event.id]: action.event } };
+        return { ...state, singleEvent: { ...action.event } };
       case REMOVE_EVENT:
         const { [action.eventId]: removeEvent, ...updatedEvents } =
           state.allEvents;

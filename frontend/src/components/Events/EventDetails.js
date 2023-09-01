@@ -14,11 +14,13 @@ const EventDetails = () => {
     state.session.user ? state.session.user : 1
   );
 
+  console.log("SINGLE EVENT ----->", singleEvent)
+
   useEffect(() => {
     dispatch(retrieveSingleEvent(eventId));
   }, [dispatch, eventId]);
 
-  if (!singleEvent) {
+  if (singleEvent.description === undefined) {
     return null;
   }
 
@@ -27,26 +29,26 @@ const EventDetails = () => {
       <Link className="groupsLink" to="/events">
         &lt; Events
       </Link>
-      <h2>{singleEvent[1].name}</h2>
+      <h2>{singleEvent.name}</h2>
       <div className="group-details">
         <img
           className="groupDetailsImage"
-          src={singleEvent[1].EventImages[0].url}
+          src={singleEvent.EventImages[0].url}
         />
-        {/* <p>{singleEvent[1].city}</p> */}
-        <p>{singleEvent[1].description}</p>
+        {/* <p>{singleEvent.city}</p> */}
+        <p>{singleEvent.description}</p>
         <p>
           {/* Organized by {singleEvent.Organizer.firstName}{" "}
           {singleEvent.Organizer.lastName} */}
         </p>
         <button>Join this Event</button>
-        {singleEvent[1].organizerId === sessionUser.id && (
-          <Link to={`/${singleEvent[1].id}/edit`}>Manage Event</Link>
+        {singleEvent.organizerId === sessionUser.id && (
+          <Link to={`/${singleEvent.id}/edit`}>Manage Event</Link>
         )}
-        {singleEvent[1].organizerId === sessionUser.id && (
+        {singleEvent.organizerId === sessionUser.id && (
           <OpenModalMenuItem
             buttonText="Delete"
-            modalComponent={<DeleteEvent eventId={singleEvent[1].id} />}
+            modalComponent={<DeleteEvent eventId={singleEvent.id} />}
           />
         )}
       </div>

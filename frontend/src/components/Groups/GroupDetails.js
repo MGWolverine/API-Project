@@ -18,6 +18,7 @@ const GroupDetails = () => {
     dispatch(retrieveSingleGroup(groupId));
   }, [dispatch, groupId]);
 
+  //TODO refactor store reducer for groups and short circuit
   if (!singleGroup) {
     return null;
   }
@@ -35,19 +36,25 @@ const GroupDetails = () => {
         <h2>{singleGroup.name}</h2>
         <p>{singleGroup.city}</p>
         <p>{singleGroup.state}</p>
+        <p>{singleGroup?.private === false ? "Public" : "Private"}</p>
         <p>
           {/* Organized by {singleGroup.Organizer.firstName}{" "}
           {singleGroup.Organizer.lastName} */}
         </p>
-        <button>Join this group</button>
+        <button onClick={() => alert("Feature coming soon...")}>
+          Join this group
+        </button>
         {singleGroup.organizerId === sessionUser.id && (
           <Link to={`/${singleGroup.id}/edit`}>Manage Group</Link>
         )}
         {singleGroup.organizerId === sessionUser.id && (
-          <OpenModalMenuItem
-            buttonText="Delete"
-            modalComponent={<DeleteGroup groupId={singleGroup.id} />}
-          />
+          <button>
+            <OpenModalMenuItem
+              buttonText="Delete"
+              modalComponent={<DeleteGroup groupId={singleGroup.id} />}
+            />
+            Delete
+          </button>
         )}
       </div>
       <div>
