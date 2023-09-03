@@ -9,12 +9,11 @@ import DeleteEvent from "./DeleteEvent";
 const EventDetails = () => {
   const { eventId } = useParams();
   const singleEvent = useSelector((state) => state.events.singleEvent);
+  // const singleGroup = useSelector((state) => state.events.singleGroup);
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) =>
     state.session.user ? state.session.user : 1
   );
-
-  console.log("SINGLE EVENT ----->", singleEvent);
 
   useEffect(() => {
     dispatch(retrieveSingleEvent(eventId));
@@ -24,47 +23,62 @@ const EventDetails = () => {
     return null;
   }
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
   return (
     <>
       <Link className="groupsLink" to="/events">
         &lt; Events
       </Link>
       <h2>{singleEvent.name}</h2>
+      <p>Hosted by First Name Last Name</p>
       <div className="group-details">
-        <img
-          className="groupDetailsImage"
-          src={singleEvent.EventImages[0].url}
-        />
-        {/* <p>{singleEvent.city}</p> */}
-        <p>{singleEvent.description}</p>
-        <p>
-          {/* Organized by {singleEvent.Organizer.firstName}{" "}
-          {singleEvent.Organizer.lastName} */}
-        </p>
-        <button onClick={() => alert("Feature coming soon...")}>
-          Join this Event
-        </button>
-        {singleEvent.organizerId === sessionUser.id && (
-          <Link to={`/${singleEvent.id}/edit`}>Manage Event</Link>
-        )}
-        {singleEvent.organizerId === sessionUser.id && (
-          <OpenModalMenuItem
-            buttonText="Delete"
-            modalComponent={<DeleteEvent eventId={singleEvent.id} />}
+        <div>
+          <img
+            className="groupDetailsImage"
+            src={singleEvent.EventImages[0].url}
           />
-        )}
+        </div>
+        <div>
+          <img></img>
+          <p>{singleEvent.Group.name}</p>
+          <p>{singleEvent.Group.private === false ? "Public" : "Private"}</p>
+        </div>
+        <div>
+          <p>Start: {formatDate(singleEvent.startDate)} · 9AM</p>
+          <p>End: {formatDate(singleEvent.endDate)} · 10AM</p>
+          <p>Price: ${singleEvent.price}</p>
+          <p>Type: {singleEvent.type}</p>
+          {singleEvent.Group.organizerId != sessionUser.id && (
+            <button onClick={() => alert("Feature coming soon...")}>
+              Join this Event
+            </button>
+          )}
+          {singleEvent.Group.organizerId === sessionUser.id && (
+            <Link to={`/${singleEvent.id}/edit`}>Manage Event</Link>
+          )}
+          {singleEvent.Group.organizerId === sessionUser.id && (
+            <button>
+              <OpenModalMenuItem
+                buttonText="Delete"
+                modalComponent={<DeleteEvent eventId={singleEvent.id} />}
+              />
+              Delete
+            </button>
+          )}
+        </div>
       </div>
       <div>
         <div>
-          <h2>Organizer</h2>
-          <p>
-            {/* {singleEvent.Organizer.firstName} {singleEvent.Organizer.lastName} */}
-          </p>
-          <h2>What we're about</h2>
-          <p>{singleEvent.about}</p>
-        </div>
-        <div>
-          <h2>Upcoming Events (#)</h2>
+          <h2>Details</h2>
+          <p>{singleEvent.description}</p>
         </div>
       </div>
     </>

@@ -104,3 +104,12 @@
   text-decoration: none;
   pointer-events: none;
 }
+
+.group-item:hover {
+  cursor: pointer;
+}
+
+.event-item:hover {
+  cursor: pointer;
+}
+

@@ -156,7 +156,8 @@ router.get('/:eventId', async (req, res) => {
           'name',
           'private',
           'city',
-          'state'
+          'state',
+          'organizerId'
         ],
       },
       {

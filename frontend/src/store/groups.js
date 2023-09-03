@@ -164,7 +164,7 @@ const groupsReducer = (state = initialState, action) => {
       });
       return { ...state, allGroups: loadedGroups };
     case RECEIVE_GROUP:
-      return { ...state, singleGroup: action.group };
+      return { ...state, singleGroup: {...action.group}};
     case CREATE_GROUP:
       return {
         ...state,

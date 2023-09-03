@@ -36,10 +36,10 @@ export const removeEvent = (eventId) => ({
   eventId,
 });
 
-export const createEvent = (newEvent, eventId) => ({
+export const createEvent = (newEvent, groupId) => ({
   type: CREATE_EVENT,
   newEvent,
-  eventId,
+  groupId,
 });
 
 //! --------- Thunks -----------
@@ -85,20 +85,21 @@ export const retrieveSingleEvent = (eventId) => async (dispatch) => {
 
 //* Create new Event
 
-export const createNewEvent = (newEvent, newImage) => async (dispatch) => {
+export const createNewEvent = (newEvent, groupId, newImage) => async (dispatch) => {
   try {
-    const response = await csrfFetch("/api/events/", {
+    const response = await csrfFetch(`/api/groups/${groupId}/events/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEvent),
     });
-
+    console.log("RESPONSE", response)
     if (!response.ok) {
       console.error("Error response from server:", response);
       return;
     }
 
     const latestEvent = await response.json();
+    console.log("LATEST EVENT", latestEvent)
 
     const response2 = await csrfFetch(`/api/events/${latestEvent.id}/images`, {
       method: "POST",

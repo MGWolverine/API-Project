@@ -7,6 +7,7 @@ import SignupFormModal from "../SignupFormModal";
 import "./Navigation.css";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const history = useHistory();
@@ -68,6 +69,9 @@ function ProfileButton({ user }) {
               </li>
               <li>{user.email}</li>
               <hr></hr>
+              <li>
+                <NavLink exact to="/events">View Events</NavLink>
+              </li>
               <li>
                 <button className="modal-logout-button" onClick={logout}>
                   Log Out

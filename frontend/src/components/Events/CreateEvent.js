@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { createNewEvent } from "../../store/events";
+import { useParams } from "react-router-dom";
+import { createNewEvent, retrieveSingleEvent } from "../../store/events";
 import "../Groups/GroupsList.css";
 
 const CreateEvent = () => {
   const dispatch = useDispatch();
+  const {groupId} = useParams();
   const history = useHistory();
-  const [price, setPrice] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [price, setPrice] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [eType, setEType] = useState("");
@@ -52,13 +54,15 @@ const CreateEvent = () => {
     validateForm();
     if (!Object.keys(validationObject).length) {
       const newEvent = {
+        venueId: 1,
         price,
         startDate,
         endDate,
+        capacity: 10,
         name,
-        about: description,
+        description,
         type: eType,
-        private: vType,
+        // private: vType,
       };
 
       const newImage = {
@@ -66,14 +70,14 @@ const CreateEvent = () => {
         preview: true,
       };
 
-      const response = await dispatch(createNewEvent(newEvent, newImage));
+      const response = await dispatch(createNewEvent(newEvent, groupId, newImage));
       history.push(`/events/${response.id}`);
     }
   };
 
   return (
     <form className="group-form" onSubmit={onSubmit}>
-      <h1>Create an event for group name</h1>
+      <h1>Create an event for {}</h1>
       <p>What is the name of your event?</p>
       <label>
         <input
@@ -144,7 +148,7 @@ const CreateEvent = () => {
         id="endDate"
         type="date"
         name="endDate"
-        onChange={(e) => setStartDate(e.target.value)}
+        onChange={(e) => setEndDate(e.target.value)}
       ></input>
       <hr></hr>
       <p>Please add in image url for your event below:</p>

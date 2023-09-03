@@ -42,12 +42,12 @@ const GroupDetails = () => {
           {singleGroup.Organizer.lastName} */}
         </p>
         {singleGroup.organizerId === sessionUser.id && (
-          <Link to={`/events/new`}>Create Event</Link>
+          <Link to={`/groups/${singleGroup.id}/events/new`}>Create Event</Link>
         )}
         {singleGroup.organizerId != sessionUser.id && (
-        <button onClick={() => alert("Feature coming soon...")}>
-          Join this group
-        </button>
+          <button onClick={() => alert("Feature coming soon...")}>
+            Join this group
+          </button>
         )}
         {singleGroup.organizerId === sessionUser.id && (
           <Link to={`/${singleGroup.id}/edit`}>Manage Group</Link>
