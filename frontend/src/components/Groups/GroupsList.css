@@ -92,7 +92,13 @@
 }
 
 .groupDetailsImage {
-  width: 200px;
+  width: 400px;
+  height: 255px;
+  border-radius: 5px;
+}
+
+.group-details-image-div {
+  padding-right: 15px;
 }
 
 .titleLink {
@@ -113,3 +119,59 @@
   cursor: pointer;
 }
 
+.group-details {
+  display: flex;
+}
+
+.detail-div {
+  padding-top: 4px;
+}
+
+.details-buttons {
+  display: flex;
+  height: 40px;
+  align-self: flex-end;
+}
+
+.details-bottom-half {
+  background-color: #f0f0f0;
+  height: 400px;
+}
+
+.event-bottom-div {
+  background-color: white;
+  width: 300px;
+  height: 120px;
+  border-radius: 20px;
+  margin-left: 10px;
+}
+
+.details-button {
+  background-color: #008fa3;
+  color: #d9eef1;
+  text-align: center;
+  cursor: pointer;
+  width: 75px;
+  height: 25px;
+  text-decoration: none;
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 5px;
+  display: flex;
+  align-self: flex-end;
+  list-style-type: none;
+}
+
+.links-details {
+  font-size: 11px;
+  text-decoration: none;
+  width: 70px;
+  height: 20px;
+  color: #d9eef1;
+}
+
+.group-details-information {
+  height: 200px;
+  width: 300px;
+}

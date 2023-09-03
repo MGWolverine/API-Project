@@ -55,7 +55,7 @@ const GroupsList = () => {
                 <p className="groupsListp">{group.about}</p>
               </div>
             </div>
-            <p>## event · </p>
+            <p>## event · Public/Private </p>
             <hr></hr>
           </div>
         ))}
