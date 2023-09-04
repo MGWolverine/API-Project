@@ -24,6 +24,12 @@ const EventsList = () => {
     return `${year}-${month}-${day}`;
   }
 
+  const sortedEvents = events.sort((a, b) => {
+    const dateA = new Date(a.startDate);
+    const dateB = new Date(b.startDate);
+    return dateA - dateB;
+  });
+
   useEffect(() => {
     dispatch(retrieveAllEvents());
   }, [dispatch]);
@@ -41,7 +47,7 @@ const EventsList = () => {
       </div>
       <p className="groupsListMiniTitle">Events in Not-Meetup</p>
       <div>
-        {events.map((event) => (
+        {sortedEvents.map((event) => (
           <div
             key={event.id}
             className="event-item"
