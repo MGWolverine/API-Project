@@ -11,17 +11,17 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await Membership.bulkCreate([
       {
-        userId: 1,
+        userId: 2,
         groupId: 1,
         status: "co-host"
       },
       {
-        userId: 2,
+        userId: 3,
         groupId: 2,
         status: "member"
       },
       {
-        userId: 3,
+        userId: 4,
         groupId: 3,
         status: "member"
       }

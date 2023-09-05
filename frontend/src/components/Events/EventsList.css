@@ -9,3 +9,6 @@
   height: auto;
   margin-bottom: 10px;
 }
+.eventsLink {
+  text-decoration: none;
+}

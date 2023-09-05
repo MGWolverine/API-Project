@@ -121,8 +121,8 @@ export const createNewGroup = (newGroup, newImage) => async (dispatch) => {
 
 //* Update a Group
 
-const EditGroup = (group) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${group.id}/edit`, {
+export const updateGroup = (group, groupId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(group),
@@ -133,9 +133,9 @@ const EditGroup = (group) => async (dispatch) => {
     return;
   }
 
-  const group = await response.json();
-  await dispatch(editGroup(group));
-  return group;
+  const editedgroup = await response.json();
+  await dispatch(editGroup(editedgroup));
+  return editedgroup;
 };
 
 //* Delete Group
@@ -164,7 +164,7 @@ const groupsReducer = (state = initialState, action) => {
       });
       return { ...state, allGroups: loadedGroups };
     case RECEIVE_GROUP:
-      return { ...state, singleGroup: action.group };
+      return { ...state, singleGroup: {...action.group}};
     case CREATE_GROUP:
       return {
         ...state,

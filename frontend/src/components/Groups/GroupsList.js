@@ -21,7 +21,7 @@ const GroupsList = () => {
     <div className="container">
       <div className="titleGroupsList">
         <div className="titleLink">
-          <Link className='groupsDetailsGroupsLink'>Groups</Link>
+          <Link className='groupsDetailsGroupsLink' to="/groups">Groups</Link>
         </div>
         <div className="titleLink">
           <Link className="eventslink" to="/events">
@@ -29,6 +29,7 @@ const GroupsList = () => {
           </Link>
         </div>
       </div>
+        <p className="groupsListMiniTitle">Groups in Not-Meetup</p>
       <div>
         {groups.map((group) => (
           <div
@@ -54,6 +55,7 @@ const GroupsList = () => {
                 <p className="groupsListp">{group.about}</p>
               </div>
             </div>
+            <p>## event · Public/Private </p>
             <hr></hr>
           </div>
         ))}
