@@ -70,6 +70,9 @@ function ProfileButton({ user }) {
               <li>{user.email}</li>
               <hr></hr>
               <li>
+                <NavLink exact to="/groups">View Groups</NavLink>
+              </li>
+              <li>
                 <NavLink exact to="/events">View Events</NavLink>
               </li>
               <li>
