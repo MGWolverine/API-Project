@@ -63,7 +63,7 @@ const GroupDetails = () => {
                 </Link>
               </button>
             )}
-            {singleGroup.organizerId != sessionUser.id && (
+            {sessionUser.id && singleGroup.organizerId != sessionUser.id && (
               <button
                 className="details-button"
                 onClick={() => alert("Feature coming soon...")}
