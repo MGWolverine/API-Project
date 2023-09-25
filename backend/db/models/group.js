@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: { msg: 'About is required' },
-          len: { args: [50, Infinity], msg: 'About must be 50 characters or more' },
+          len: { args: [30, Infinity], msg: 'About must be 30 characters or more' },
         },
       },
       type: {
