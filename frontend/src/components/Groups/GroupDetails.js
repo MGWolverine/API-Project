@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -79,14 +79,11 @@ const GroupDetails = () => {
               </button>
             )}
             {singleGroup.organizerId === sessionUser.id && (
-              <button className="details-button">
-                <OpenModalMenuItem
-                  className="links-details"
-                  buttonText="Delete"
-                  modalComponent={<DeleteGroup groupId={singleGroup.id} />}
-                />
-                Delete
-              </button>
+              <OpenModalMenuItem
+                className="links-details"
+                itemText="Delete"
+                modalComponent={<DeleteGroup groupId={singleGroup.id} />}
+              />
             )}
           </div>
         </div>

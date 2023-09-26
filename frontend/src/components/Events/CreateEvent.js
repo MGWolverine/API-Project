@@ -62,6 +62,7 @@ const CreateEvent = () => {
         name,
         description,
         type: eType,
+        // image,
         // private: vType,
       };
 
@@ -71,7 +72,11 @@ const CreateEvent = () => {
       };
 
       const response = await dispatch(createNewEvent(newEvent, groupId, newImage));
-      history.push(`/events/${response.id}`);
+      console.log("🚀 ~ file: CreateEvent.js:75 ~ onSubmit ~ response:", response)
+
+      if(!response.errors) {
+        history.push(`/events/${response.id}`);
+      }
     }
   };
 
