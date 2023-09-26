@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { retrieveAllEvents } from "../../store/events";
 import "./EventsList.css";
 import "../Groups/GroupsList.css";
-import { useHistory } from "react-router-dom";
 
 const EventsList = () => {
   const history = useHistory();

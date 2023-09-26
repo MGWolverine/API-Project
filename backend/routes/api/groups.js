@@ -171,6 +171,14 @@ router.get('/:groupId', async (req,res) => {
         attributes: [
           'id', 'groupId', 'address', 'city', 'state', 'lat', 'lng'
         ],
+      },
+      {
+        model: Event,
+        include: [
+          {
+            model: EventImage
+          }
+        ]
       }
     ]
   })

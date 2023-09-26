@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { Group, Venue, Event, sequelize, Attendance, EventImage, User, Membership } = require('../../db/models');
+const { Group, Venue, Event, sequelize, Attendance, EventImage, User, Membership, GroupImage } = require('../../db/models');
 const attendance = require('../../db/models/attendance');
 const { query } = require('express');
 
@@ -159,6 +159,11 @@ router.get('/:eventId', async (req, res) => {
           'state',
           'organizerId'
         ],
+        include: [
+          {
+            model: GroupImage,
+          }
+        ]
       },
       {
         model: Venue,
