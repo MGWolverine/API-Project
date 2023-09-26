@@ -68,7 +68,9 @@ const EventDetails = () => {
                 </button>
               )}
               {singleEvent.Group.organizerId === sessionUser.id && (
-                <Link to={`/${singleEvent.id}/edit`}>Manage Event</Link>
+                <button onClick={() => alert("Feature coming soon...")}>
+                Manage Event
+              </button>
               )}
               {singleEvent.Group.organizerId === sessionUser.id && (
                 <button>
