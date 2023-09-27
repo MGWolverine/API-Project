@@ -49,7 +49,7 @@ const EventDetails = () => {
         &lt; Events
       </Link>
       <h2>{singleEvent.name}</h2>
-      <p>Hosted by Fulan Ibn Fulan</p>
+      <p>Hosted by {singleEvent?.Group?.Organizer?.firstName} {singleEvent?.Group?.Organizer?.lastName}</p>
       <div className="mainbody-div">
         <div className="group-details2">
           <div className="group-details-image-div">
