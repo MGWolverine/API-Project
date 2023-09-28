@@ -116,8 +116,8 @@ const GroupDetails = () => {
         <div>
           <h2>Events ({singleGroup?.Events?.length})</h2>
         </div>
-        <div className="event-bottom-div">
         {sortedEvents?.map((event) => (
+        <div className="event-bottom-div">
           <div
             key={event.id}
             className="event-item group"
@@ -143,8 +143,8 @@ const GroupDetails = () => {
             </div>
             <p className="groupsListp group">{event.description}</p>
           </div>
-        ))}
         </div>
+        ))}
       </div>
     </>
   );
