@@ -29,7 +29,7 @@ const UpdateGroup = () => {
       setName(groupUpdate.name || "");
       setDescription(groupUpdate.about || "");
       setGType(groupUpdate.type || "");
-      setVType(groupUpdate.private || "");
+      setVType(groupUpdate.private);
     }
   }, [groupUpdate]);
 
