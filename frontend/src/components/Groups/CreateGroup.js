@@ -62,13 +62,16 @@ const CreateGroup = () => {
       }
 
       const response = await dispatch(createNewGroup(newGroup, newImage));
-      history.push(`/groups/${response.id}`);
+
+      if(!response.errors) {
+        history.push(`/groups/${response.id}`);
+      }
     }
   }
 
   return (
     <form className="group-form" onSubmit={onSubmit}>
-      <h3>BECOME AN ORGANIZER</h3>
+      <h3>START A NEW GROUP</h3>
       <h2>We'll walk you through a few steps to build your local community</h2>
       <hr></hr>
       <h2>First, set your group's location.</h2>

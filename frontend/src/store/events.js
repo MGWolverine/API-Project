@@ -92,14 +92,14 @@ export const createNewEvent = (newEvent, groupId, newImage) => async (dispatch) 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEvent),
     });
-    console.log("RESPONSE", response)
+
     if (!response.ok) {
       console.error("Error response from server:", response);
       return;
     }
 
     const latestEvent = await response.json();
-    console.log("LATEST EVENT", latestEvent)
+
 
     const response2 = await csrfFetch(`/api/events/${latestEvent.id}/images`, {
       method: "POST",
@@ -115,6 +115,8 @@ export const createNewEvent = (newEvent, groupId, newImage) => async (dispatch) 
     return latestEvent;
   } catch (error) {
     console.error("Network error:", error);
+    const errorRes = error.json();
+    return errorRes;
   }
 };
 

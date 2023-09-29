@@ -7,7 +7,7 @@ import "../Groups/GroupsList.css";
 
 const CreateEvent = () => {
   const dispatch = useDispatch();
-  const {groupId} = useParams();
+  const { groupId } = useParams();
   const history = useHistory();
   const [price, setPrice] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -38,7 +38,7 @@ const CreateEvent = () => {
         "Description must be at least 30 characters long";
     }
     if (!eType) {
-      errorsObject.EType = "Event Type is required";
+      errorsObject.eType = "Event Type is required";
     }
     if (!vType) {
       errorsObject.vType = "Visibility Type is required";
@@ -62,6 +62,7 @@ const CreateEvent = () => {
         name,
         description,
         type: eType,
+        // image,
         // private: vType,
       };
 
@@ -70,8 +71,13 @@ const CreateEvent = () => {
         preview: true,
       };
 
-      const response = await dispatch(createNewEvent(newEvent, groupId, newImage));
-      history.push(`/events/${response.id}`);
+      const response = await dispatch(
+        createNewEvent(newEvent, groupId, newImage)
+      );
+
+      if (!response.errors) {
+        history.push(`/events/${response.id}`);
+      }
     }
   };
 
@@ -104,10 +110,10 @@ const CreateEvent = () => {
         </option>
         <option value="In person">In person</option>
         <option value="Online">Online</option>
-        {validationObject.eType && (
-          <p className="errors">{validationObject.eType}</p>
-        )}
       </select>
+      {validationObject.eType && (
+        <p className="errors">{validationObject.eType}</p>
+      )}
       <p>Is this event private or public?</p>
       <select
         id="vtype"
@@ -119,10 +125,10 @@ const CreateEvent = () => {
         </option>
         <option value={true}>Private</option>
         <option value={false}>Public</option>
-        {validationObject.vType && (
-          <p className="errors">{validationObject.vType}</p>
-        )}
       </select>
+      {validationObject.vType && (
+        <p className="errors">{validationObject.vType}</p>
+      )}
       <p>What is the price for your event?</p>
       <label>
         ${" "}
@@ -135,6 +141,9 @@ const CreateEvent = () => {
           onChange={(e) => setPrice(e.target.value)}
         ></input>
       </label>
+      {validationObject.price && (
+        <p className="errors">{validationObject.price}</p>
+      )}
       <hr></hr>
       <p>When does your event start?</p>
       <input
@@ -143,6 +152,9 @@ const CreateEvent = () => {
         name="startDate"
         onChange={(e) => setStartDate(e.target.value)}
       ></input>
+      {validationObject.startDate && (
+        <p className="errors">{validationObject.startDate}</p>
+      )}
       <p>When does your event end?</p>
       <input
         id="endDate"
@@ -150,6 +162,9 @@ const CreateEvent = () => {
         name="endDate"
         onChange={(e) => setEndDate(e.target.value)}
       ></input>
+      {validationObject.endDate && (
+        <p className="errors">{validationObject.endDate}</p>
+      )}
       <hr></hr>
       <p>Please add in image url for your event below:</p>
       <label>
@@ -170,6 +185,9 @@ const CreateEvent = () => {
         style={{ width: "300px", height: "150px" }}
         onChange={(e) => setDescription(e.target.value)}
       ></textarea>
+      {validationObject.description && (
+        <p className="errors">{validationObject.description}</p>
+      )}
       <hr></hr>
       <button className="button" type="submit">
         Create Event

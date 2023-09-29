@@ -34,9 +34,9 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
         validate: {
-          len: [50, Infinity],
+          len: [30, Infinity],
           notEmpty: {
-            msg: "About must be 50 characters or more"
+            msg: "About must be 30 characters or more"
           }
         }
       },

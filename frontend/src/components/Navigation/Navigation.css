@@ -17,6 +17,10 @@
   list-style: none;
 }
 
+.profile-dropdown li:hover {
+  cursor: pointer;
+}
+
 .link.startGroup {
   margin-top: 3px;
   text-decoration: underline;
@@ -29,6 +33,7 @@
   margin-bottom: 30px;
   margin-top: 20px;
   border-bottom: 2px solid #000000;
+  /* width: 1024px; */
 }
 
 .homeLink {

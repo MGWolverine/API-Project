@@ -1,18 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { retrieveSingleGroup } from "../../store/groups";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import DeleteGroup from "./DeleteGroup";
 
 const GroupDetails = () => {
+  const history = useHistory();
   const { groupId } = useParams();
   const singleGroup = useSelector((state) => state.groups.singleGroup);
+  const events = useSelector((state) => state.groups.singleGroup.Events)
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) =>
     state.session.user ? state.session.user : 1
   );
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  const sortedEvents = events?.sort((a, b) => {
+    const dateA = new Date(a.startDate);
+    const dateB = new Date(b.startDate);
+    return dateA - dateB;
+  });
 
   useEffect(() => {
     dispatch(retrieveSingleGroup(groupId));
@@ -43,13 +59,12 @@ const GroupDetails = () => {
             </p>
             <p>
               {" "}
-              ## events ·{" "}
+              {singleGroup?.Events?.length} events ·{" "}
               {singleGroup?.private === false ? "Public" : "Private"}
             </p>
             <p>
-              Organized by Fulan Ibn Fulan
-              {/* Organized by {singleGroup.Organizer.firstName}{" "}
-          {singleGroup.Organizer.lastName} */}
+              Organized by {singleGroup?.Organizer?.firstName}{" "}
+          {singleGroup?.Organizer?.lastName}
             </p>
           </div>
           <div className="details-buttons">
@@ -63,7 +78,7 @@ const GroupDetails = () => {
                 </Link>
               </button>
             )}
-            {singleGroup.organizerId != sessionUser.id && (
+            {sessionUser.id && singleGroup.organizerId != sessionUser.id && (
               <button
                 className="details-button"
                 onClick={() => alert("Feature coming soon...")}
@@ -79,14 +94,11 @@ const GroupDetails = () => {
               </button>
             )}
             {singleGroup.organizerId === sessionUser.id && (
-              <button className="details-button">
-                <OpenModalMenuItem
-                  className="links-details"
-                  buttonText="Delete"
-                  modalComponent={<DeleteGroup groupId={singleGroup.id} />}
-                />
-                Delete
-              </button>
+              <OpenModalMenuItem
+                className="links-details"
+                itemText="Delete"
+                modalComponent={<DeleteGroup groupId={singleGroup.id} />}
+              />
             )}
           </div>
         </div>
@@ -96,18 +108,43 @@ const GroupDetails = () => {
           <h2>Organizer</h2>
           <p>
             {" "}
-            Fulan Ibn Fulan
-            {/* {singleGroup.Organizer.firstName} {singleGroup.Organizer.lastName} */}
+            {singleGroup?.Organizer?.firstName} {singleGroup?.Organizer?.lastName}
           </p>
           <h2>What we're about</h2>
           <p>{singleGroup.about}</p>
         </div>
         <div>
-          <h2>Upcoming Events (#)</h2>
+          <h2>Events ({singleGroup?.Events?.length})</h2>
         </div>
+        {sortedEvents?.map((event) => (
         <div className="event-bottom-div">
-          <p>Event card</p>
+          <div
+            key={event.id}
+            className="event-item group"
+            onClick={() => {
+              history.push(`/events/${event.id}`);
+            }}
+          >
+            <div className="groupContainer group">
+              <div className="groupImageDiv group">
+                <img
+                  className="groupImage group"
+                  src={event?.EventImages[0]?.url}
+                  alt={event.name}
+                />
+              </div>
+              <div className="groupInfo group">
+                <p>{formatDate(event.startDate)} · 9:30 AM</p>
+                <h2>{event.name}</h2>
+                <p className="groupsListp group">
+                  {singleGroup.city}, {singleGroup.state}
+                </p>
+              </div>
+            </div>
+            <p className="groupsListp group">{event.description}</p>
+          </div>
         </div>
+        ))}
       </div>
     </>
   );

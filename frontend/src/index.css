@@ -1,14 +1,18 @@
 /* TODO Add site wide styles */
 #root {
     width: 80%;
+  /* width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; */
 }
 
 body {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-self: center;
-    justify-content: center;
-    min-width: 1024px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-self: center;
+  justify-content: center;
+  min-width: 1024px;
 }
-

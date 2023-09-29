@@ -2,11 +2,11 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./HomePage.css";
 
+// <div className="homepage">
 const HomePage = () => {
   const sessionUser = useSelector((state) => state.session.user);
 
   return (
-    <div className="homepage">
       <div className="body">
         <section className="container1">
           <div className="info">
@@ -74,8 +74,9 @@ const HomePage = () => {
           </div>
         </section>
       </div>
-    </div>
   );
 };
 
 export default HomePage;
+
+{/* </div> */}

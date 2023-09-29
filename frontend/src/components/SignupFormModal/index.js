@@ -55,7 +55,7 @@ function SignupFormModal() {
     }
     return setErrors({
       confirmPassword:
-        "Confirm Password field must be the same as the Password field",
+        "Confirm Password must match your Password!",
     });
   };
 

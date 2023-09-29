@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { retrieveSingleEvent } from "../../store/events";
@@ -7,12 +7,15 @@ import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import DeleteEvent from "./DeleteEvent";
 import "./EventsList.css";
 import "../Groups/GroupsList.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClock, faMapPin, faDollarSign } from '@fortawesome/free-solid-svg-icons'
 
 const EventDetails = () => {
   const { eventId } = useParams();
   const singleEvent = useSelector((state) => state.events.singleEvent);
   // const singleGroup = useSelector((state) => state.events.singleGroup);
   const dispatch = useDispatch();
+  // const [eventPrice, setEventPrice] = useState("")
   const sessionUser = useSelector((state) =>
     state.session.user ? state.session.user : 1
   );
@@ -24,6 +27,12 @@ const EventDetails = () => {
   if (singleEvent.description === undefined) {
     return null;
   }
+
+  // if (singleEvent.price === 0) {
+  //   setEventPrice("FREE");
+  // } else {
+  //   setEventPrice(singleEvent.price);
+  // }
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -40,7 +49,7 @@ const EventDetails = () => {
         &lt; Events
       </Link>
       <h2>{singleEvent.name}</h2>
-      <p>Hosted by Fulan Ibn Fulan</p>
+      <p>Hosted by {singleEvent?.Group?.Organizer?.firstName} {singleEvent?.Group?.Organizer?.lastName}</p>
       <div className="mainbody-div">
         <div className="group-details2">
           <div className="group-details-image-div">
@@ -51,24 +60,27 @@ const EventDetails = () => {
           </div>
           <div>
             <div>
-              <img></img>
+              <img className="groupImage" src={singleEvent.Group.GroupImages[0].url}></img>
               <p>{singleEvent.Group.name}</p>
               <p>
                 {singleEvent.Group.private === false ? "Public" : "Private"}
               </p>
             </div>
             <div className="group-details-information">
-              <p>Start: {formatDate(singleEvent.startDate)} · 9AM</p>
-              <p>End: {formatDate(singleEvent.endDate)} · 10AM</p>
-              <p>Price: ${singleEvent.price}</p>
-              <p>Type: {singleEvent.type}</p>
+            <FontAwesomeIcon icon={faClock} />
+              <p>START: {formatDate(singleEvent.startDate)} · 9AM</p>
+              <p>END: {formatDate(singleEvent.endDate)} · 10AM</p>
+              <p><FontAwesomeIcon icon={faDollarSign} /> {singleEvent.price}</p>
+              <p><FontAwesomeIcon icon={faMapPin} /> {singleEvent.type}</p>
               {singleEvent.Group.organizerId != sessionUser.id && (
                 <button onClick={() => alert("Feature coming soon...")}>
                   Join this Event
                 </button>
               )}
               {singleEvent.Group.organizerId === sessionUser.id && (
-                <Link to={`/${singleEvent.id}/edit`}>Manage Event</Link>
+                <button onClick={() => alert("Feature coming soon...")}>
+                  Manage Event
+                </button>
               )}
               {singleEvent.Group.organizerId === sessionUser.id && (
                 <button>

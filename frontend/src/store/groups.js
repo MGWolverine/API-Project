@@ -116,6 +116,8 @@ export const createNewGroup = (newGroup, newImage) => async (dispatch) => {
     return latestGroup;
   } catch (error) {
     console.error("Network error:", error);
+    const errorRes = error.json();
+    return errorRes;
   }
 };
 
