@@ -17,6 +17,10 @@
   list-style: none;
 }
 
+.profile-dropdown li:hover {
+  cursor: pointer;
+}
+
 .link.startGroup {
   margin-top: 3px;
   text-decoration: underline;
