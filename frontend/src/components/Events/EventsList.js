@@ -41,7 +41,7 @@ const EventsList = () => {
           </Link>
         </div>
         <div className="titleLink">
-          <Link to="/events">Events</Link>
+          <Link className="eventslinkUnder" to="/events">Events</Link>
         </div>
       </div>
       <p className="groupsListMiniTitle">Events in Not-Meetup</p>

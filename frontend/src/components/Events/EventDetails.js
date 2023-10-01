@@ -7,8 +7,12 @@ import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import DeleteEvent from "./DeleteEvent";
 import "./EventsList.css";
 import "../Groups/GroupsList.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClock, faMapPin, faDollarSign } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faClock,
+  faMapPin,
+  faDollarSign,
+} from "@fortawesome/free-solid-svg-icons";
 
 const EventDetails = () => {
   const { eventId } = useParams();
@@ -49,7 +53,10 @@ const EventDetails = () => {
         &lt; Events
       </Link>
       <h2>{singleEvent.name}</h2>
-      <p>Hosted by {singleEvent?.Group?.Organizer?.firstName} {singleEvent?.Group?.Organizer?.lastName}</p>
+      <p>
+        Hosted by {singleEvent?.Group?.Organizer?.firstName}{" "}
+        {singleEvent?.Group?.Organizer?.lastName}
+      </p>
       <div className="mainbody-div">
         <div className="group-details2">
           <div className="group-details-image-div">
@@ -58,39 +65,48 @@ const EventDetails = () => {
               src={singleEvent.EventImages[0].url}
             />
           </div>
-          <div>
-            <div>
-              <img className="groupImage" src={singleEvent.Group.GroupImages[0].url}></img>
-              <p>{singleEvent.Group.name}</p>
-              <p>
-                {singleEvent.Group.private === false ? "Public" : "Private"}
-              </p>
+          <div className="eventDetailsCard">
+            <div className="eventImageAndLocation">
+              <img
+                className="groupImageEvent"
+                src={singleEvent.Group.GroupImages[0].url}
+              ></img>
+              <div className="groupInformationEvent">
+                <p>{singleEvent.Group.name}</p>
+                <p>
+                  {singleEvent.Group.private === false ? "Public" : "Private"}
+                </p>
+              </div>
             </div>
             <div className="group-details-information">
-            <FontAwesomeIcon icon={faClock} />
+              <FontAwesomeIcon icon={faClock} />
               <p>START: {formatDate(singleEvent.startDate)} · 9AM</p>
               <p>END: {formatDate(singleEvent.endDate)} · 10AM</p>
-              <p><FontAwesomeIcon icon={faDollarSign} /> {singleEvent.price}</p>
-              <p><FontAwesomeIcon icon={faMapPin} /> {singleEvent.type}</p>
-              {singleEvent.Group.organizerId != sessionUser.id && (
-                <button onClick={() => alert("Feature coming soon...")}>
-                  Join this Event
-                </button>
-              )}
-              {singleEvent.Group.organizerId === sessionUser.id && (
-                <button onClick={() => alert("Feature coming soon...")}>
-                  Manage Event
-                </button>
-              )}
-              {singleEvent.Group.organizerId === sessionUser.id && (
-                <button>
+              <p>
+                <FontAwesomeIcon icon={faDollarSign} /> {singleEvent.price}
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faMapPin} /> {singleEvent.type}
+              </p>
+              <div className="eventDetailsButtons">
+                {singleEvent.Group.organizerId != sessionUser.id && (
+                  <button onClick={() => alert("Feature coming soon...")}>
+                    Join this Event
+                  </button>
+                )}
+                {singleEvent.Group.organizerId === sessionUser.id && (
+                  <button onClick={() => alert("Feature coming soon...")}>
+                    Manage Event
+                  </button>
+                )}
+                {singleEvent.Group.organizerId === sessionUser.id && (
                   <OpenModalMenuItem
-                    buttonText="Delete"
+                    className="modal-details"
+                    itemText="Delete"
                     modalComponent={<DeleteEvent eventId={singleEvent.id} />}
                   />
-                  Delete
-                </button>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>

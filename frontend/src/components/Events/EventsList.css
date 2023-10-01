@@ -2,6 +2,7 @@
   margin: 20px;
   padding: 20px;
   text-align: left;
+  display: contents;
 }
 
 .event-item img {
@@ -9,6 +10,26 @@
   height: auto;
   margin-bottom: 10px;
 }
-.eventsLink {
+.eventslinkUnder {
   text-decoration: none;
+}
+
+.groupImageEvent {
+  height: 75px;
+  border-radius: 5px;
+  margin-right: 20px;
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+
+.eventImageAndLocation {
+  display: flex;
+}
+
+.groupInformationEvent {
+  margin-top: 10px;
+}
+
+.eventDetailsButtons {
+  display: flex;
 }

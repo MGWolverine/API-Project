@@ -16,7 +16,14 @@ const DeleteEvent = ({ eventId }) => {
 
   return (
     <>
-      <button onClick={remove}>Delete Event</button>
+      <div>
+        <h1>Confirm Delete</h1>
+        <h3>Are you sure you want to remove this event?</h3>
+        <div>
+          <button onClick={remove}>Yes (Delete Event)</button>
+          <button onClick={closeModal}>No (Keep Event)</button>
+        </div>
+      </div>
     </>
   );
 };

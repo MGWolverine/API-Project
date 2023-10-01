@@ -132,9 +132,9 @@ const CreateGroup = () => {
         add to it later, too.
       </p>
       <ol type="1">
-        <li> What's the purpose of the group?</li>
-        <li>Who should join?</li>
-        <li>What will you do at your events?</li>
+        <li className="createGroupLists"> What's the purpose of the group?</li>
+        <li className="createGroupLists">Who should join?</li>
+        <li className="createGroupLists">What will you do at your events?</li>
       </ol>
       <textarea
         placeholder="Please write at least 30 characters"

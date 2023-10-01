@@ -24,7 +24,7 @@ const GroupsList = () => {
           <Link className='groupsDetailsGroupsLink' to="/groups">Groups</Link>
         </div>
         <div className="titleLink">
-          <Link className="eventslink" to="/events">
+          <Link className="eventslinkHead" to="/events">
             Events
           </Link>
         </div>
