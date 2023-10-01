@@ -55,7 +55,7 @@ const GroupsList = () => {
                 <p className="groupsListp">{group.about}</p>
               </div>
             </div>
-            <p>{group?.Events?.length} event · Public/Private </p>
+            <p>{group?.Events?.length} event · {group?.private === false ? "Public" : "Private"} </p>
             <hr></hr>
           </div>
         ))}
