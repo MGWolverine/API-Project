@@ -79,9 +79,15 @@ const EventDetails = () => {
               </div>
             </div>
             <div className="group-details-information">
-              <FontAwesomeIcon icon={faClock} />
-              <p>START: {formatDate(singleEvent.startDate)} · 9AM</p>
-              <p>END: {formatDate(singleEvent.endDate)} · 10AM</p>
+              <div className="time">
+                <div className="clock">
+                  <FontAwesomeIcon icon={faClock} />
+                </div>
+                <div>
+                  <p>START: {formatDate(singleEvent.startDate)} · 9AM</p>
+                  <p>END: {formatDate(singleEvent.endDate)} · 10AM</p>
+                </div>
+              </div>
               <p>
                 <FontAwesomeIcon icon={faDollarSign} /> {singleEvent.price}
               </p>

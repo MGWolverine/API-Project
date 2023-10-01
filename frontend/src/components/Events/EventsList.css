@@ -33,3 +33,12 @@
 .eventDetailsButtons {
   display: flex;
 }
+
+.time {
+  display: flex;
+}
+
+.clock {
+  padding-top: 17px;
+  margin-right: 8px;
+}
