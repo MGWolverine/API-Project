@@ -102,19 +102,23 @@ const EventDetails = () => {
                   </button>
                 )}
                 {singleEvent.Group.organizerId === sessionUser.id && (
-                  <button className="manage-event-button" onClick={() => alert("Feature coming soon...")}>
+                  <button
+                    className="manage-event-button"
+                    onClick={() => alert("Feature coming soon...")}
+                  >
                     Manage Event
                   </button>
                 )}
-                <div className="delete-button-events">
-                  {singleEvent.Group.organizerId === sessionUser.id && (
+
+                {singleEvent.Group.organizerId === sessionUser.id && (
+                  <div className="delete-button-events">
                     <OpenModalMenuItem
                       className="modal-details"
                       itemText="Delete"
                       modalComponent={<DeleteEvent eventId={singleEvent.id} />}
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -9,7 +9,7 @@ const GroupDetails = () => {
   const history = useHistory();
   const { groupId } = useParams();
   const singleGroup = useSelector((state) => state.groups.singleGroup);
-  const events = useSelector((state) => state.groups.singleGroup.Events)
+  const events = useSelector((state) => state.groups.singleGroup.Events);
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) =>
     state.session.user ? state.session.user : 1
@@ -64,7 +64,7 @@ const GroupDetails = () => {
             </p>
             <p>
               Organized by {singleGroup?.Organizer?.firstName}{" "}
-          {singleGroup?.Organizer?.lastName}
+              {singleGroup?.Organizer?.lastName}
             </p>
           </div>
           <div className="details-buttons">
@@ -93,15 +93,16 @@ const GroupDetails = () => {
                 </Link>
               </button>
             )}
-            <div className="delete-button-groups">
+
             {singleGroup.organizerId === sessionUser.id && (
-              <OpenModalMenuItem
-              className="links-details"
-              itemText="Delete"
-              modalComponent={<DeleteGroup groupId={singleGroup.id} />}
-              />
-              )}
+              <div className="delete-button-groups">
+                <OpenModalMenuItem
+                  className="links-details"
+                  itemText="Delete"
+                  modalComponent={<DeleteGroup groupId={singleGroup.id} />}
+                />
               </div>
+            )}
           </div>
         </div>
       </div>
@@ -110,7 +111,8 @@ const GroupDetails = () => {
           <h2>Organizer</h2>
           <p>
             {" "}
-            {singleGroup?.Organizer?.firstName} {singleGroup?.Organizer?.lastName}
+            {singleGroup?.Organizer?.firstName}{" "}
+            {singleGroup?.Organizer?.lastName}
           </p>
           <h2>What we're about</h2>
           <p>{singleGroup.about}</p>
@@ -119,33 +121,33 @@ const GroupDetails = () => {
           <h2>Events ({singleGroup?.Events?.length})</h2>
         </div>
         {sortedEvents?.map((event) => (
-        <div className="event-bottom-div">
-          <div
-            key={event.id}
-            className="event-item group"
-            onClick={() => {
-              history.push(`/events/${event.id}`);
-            }}
-          >
-            <div className="groupContainer group">
-              <div className="groupImageDiv group">
-                <img
-                  className="groupImage group"
-                  src={event?.EventImages[0]?.url}
-                  alt={event.name}
-                />
+          <div className="event-bottom-div">
+            <div
+              key={event.id}
+              className="event-item group"
+              onClick={() => {
+                history.push(`/events/${event.id}`);
+              }}
+            >
+              <div className="groupContainer group">
+                <div className="groupImageDiv group">
+                  <img
+                    className="groupImage group"
+                    src={event?.EventImages[0]?.url}
+                    alt={event.name}
+                  />
+                </div>
+                <div className="groupInfo group">
+                  <p>{formatDate(event.startDate)} · 9:30 AM</p>
+                  <h2>{event.name}</h2>
+                  <p className="groupsListp group">
+                    {singleGroup.city}, {singleGroup.state}
+                  </p>
+                </div>
               </div>
-              <div className="groupInfo group">
-                <p>{formatDate(event.startDate)} · 9:30 AM</p>
-                <h2>{event.name}</h2>
-                <p className="groupsListp group">
-                  {singleGroup.city}, {singleGroup.state}
-                </p>
-              </div>
+              <p className="groupsListp group">{event.description}</p>
             </div>
-            <p className="groupsListp group">{event.description}</p>
           </div>
-        </div>
         ))}
       </div>
     </>
