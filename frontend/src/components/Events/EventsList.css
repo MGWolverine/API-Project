@@ -32,6 +32,7 @@
 
 .eventDetailsButtons {
   display: flex;
+
 }
 
 .time {
@@ -41,4 +42,28 @@
 .clock {
   padding-top: 17px;
   margin-right: 8px;
+}
+
+.delete-button-events {
+  border: grey solid 1px;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  margin-left: 5px;
+  border-radius: 4px;
+  background-color: #8B0000;
+  color: #d9eef1;
+  cursor: pointer;
+}
+
+.manage-event-button {
+  background-color: #008fa3;
+  color: #d9eef1;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }

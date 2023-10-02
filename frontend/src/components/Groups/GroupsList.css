@@ -204,3 +204,16 @@ li {
 .event-item.group {
   display: contents;
 } */
+
+.delete-button-groups {
+  border: grey solid 1px;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  margin-left: 5px;
+  border-radius: 4px;
+  background-color: #8B0000;
+  color: #d9eef1;
+  cursor: pointer;
+  height: 32px;
+}

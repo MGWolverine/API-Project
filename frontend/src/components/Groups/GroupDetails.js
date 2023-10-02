@@ -93,13 +93,15 @@ const GroupDetails = () => {
                 </Link>
               </button>
             )}
+            <div className="delete-button-groups">
             {singleGroup.organizerId === sessionUser.id && (
               <OpenModalMenuItem
-                className="links-details"
-                itemText="Delete"
-                modalComponent={<DeleteGroup groupId={singleGroup.id} />}
+              className="links-details"
+              itemText="Delete"
+              modalComponent={<DeleteGroup groupId={singleGroup.id} />}
               />
-            )}
+              )}
+              </div>
           </div>
         </div>
       </div>

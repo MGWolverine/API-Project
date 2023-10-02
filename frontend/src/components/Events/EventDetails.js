@@ -89,7 +89,8 @@ const EventDetails = () => {
                 </div>
               </div>
               <p>
-                <FontAwesomeIcon icon={faDollarSign} /> {singleEvent.price}
+                <FontAwesomeIcon icon={faDollarSign} />{" "}
+                {singleEvent.price === 0 ? "FREE" : singleEvent.price}
               </p>
               <p>
                 <FontAwesomeIcon icon={faMapPin} /> {singleEvent.type}
@@ -101,17 +102,19 @@ const EventDetails = () => {
                   </button>
                 )}
                 {singleEvent.Group.organizerId === sessionUser.id && (
-                  <button onClick={() => alert("Feature coming soon...")}>
+                  <button className="manage-event-button" onClick={() => alert("Feature coming soon...")}>
                     Manage Event
                   </button>
                 )}
-                {singleEvent.Group.organizerId === sessionUser.id && (
-                  <OpenModalMenuItem
-                    className="modal-details"
-                    itemText="Delete"
-                    modalComponent={<DeleteEvent eventId={singleEvent.id} />}
-                  />
-                )}
+                <div className="delete-button-events">
+                  {singleEvent.Group.organizerId === sessionUser.id && (
+                    <OpenModalMenuItem
+                      className="modal-details"
+                      itemText="Delete"
+                      modalComponent={<DeleteEvent eventId={singleEvent.id} />}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>

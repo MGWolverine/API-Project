@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { createNewEvent, retrieveSingleEvent } from "../../store/events";
@@ -18,6 +18,7 @@ const CreateEvent = () => {
   const [vType, setVType] = useState("");
   const [image, setImage] = useState("");
   const [validationObject, setValidationObject] = useState({});
+  
 
   const validateForm = () => {
     const errorsObject = {};
@@ -181,7 +182,7 @@ const CreateEvent = () => {
       <hr></hr>
       <p>Please describe your event:</p>
       <textarea
-        placeholder="Please write at least 30 characters"
+        placeholder="Please include at least 30 characters"
         style={{ width: "300px", height: "150px" }}
         onChange={(e) => setDescription(e.target.value)}
       ></textarea>
